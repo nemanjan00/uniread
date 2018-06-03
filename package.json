@@ -12,13 +12,15 @@
   },
   "scripts": {
     "get-books": "./devScripts/getBooks.sh",
-    "lint": "./node_modules/.bin/eslint . --fix"
+    "lint": "./node_modules/.bin/eslint . --fix",
+    "test": "./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js"
   },
   "bin": {
     "uniread": "./bin/uniread.js"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "eslint": "^4.19.1"
+    "eslint": "^4.19.1",
+    "mocha": "^5.2.0"
   }
 }
