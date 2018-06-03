@@ -1,6 +1,6 @@
 # uniread
 
-Uniread is Spritz like CLI fast reading software.
+Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 
 ## Content
 
