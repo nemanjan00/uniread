@@ -6,6 +6,7 @@ Uniread is Spritz like CLI fast reading software.
 
 <!-- vim-markdown-toc GFM -->
 
+* [Supported ebook types](#supported-ebook-types)
 * [Developers guide](#developers-guide)
 	* [Yarn package manager](#yarn-package-manager)
 	* [Getting sample books for testing](#getting-sample-books-for-testing)
@@ -13,6 +14,10 @@ Uniread is Spritz like CLI fast reading software.
 * [Authors](#authors)
 
 <!-- vim-markdown-toc -->
+
+## Supported ebook types
+
+ * epub (thanks to [julien-c/epub](https://github.com/julien-c/epub) library)
 
 ## Developers guide
 
