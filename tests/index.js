@@ -2,5 +2,6 @@
 
 describe("Unichat", function() {
 	require("./devTools")	
+	require("./books");
 });
 

@@ -50,7 +50,7 @@ module.exports = (filename) => {
 						chapters[key].content = content;
 					});
 
-					console.log(chapters);
+					resolve(chapters);
 				});
 			});
 		}
@@ -58,8 +58,4 @@ module.exports = (filename) => {
 
 	return book._init(filename);
 };
-
-module.exports("./books/Metamorphosis-jackson.epub").then((book) => {
-	book.getChapters();
-});
 
