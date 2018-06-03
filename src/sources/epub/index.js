@@ -16,12 +16,8 @@ module.exports = (filename) => {
 			});
 		},
 		_getChapter: (id) => {
-			return new Promise((resolve, reject) => {
+			return new Promise((resolve) => {
 				book._epub.getChapter(id, (error, content) => {
-					if(error){
-						reject(error);
-					}
-
 					resolve(content);
 				});
 			});

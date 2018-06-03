@@ -10,3 +10,7 @@
 
 /books
 
+# Coverage
+
+/.nyc_output
+

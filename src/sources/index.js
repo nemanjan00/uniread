@@ -13,6 +13,10 @@ module.exports = {
 
 		const type = fileType(data);
 
+		if(!type){
+			return false;
+		}
+
 		if(engines[type.ext] !== undefined){
 			return engines[type.ext];
 		}
