@@ -1,4 +1,6 @@
 # uniread
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fnemanjan00%2Funiread.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fnemanjan00%2Funiread?ref=badge_shield)
+
 
 Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 
@@ -66,3 +68,7 @@ yarn lint
 
  * [Nemanja Nedeljković](https://github.com/nemanjan00)
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fnemanjan00%2Funiread.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fnemanjan00%2Funiread?ref=badge_large)
