@@ -20,7 +20,7 @@ acorn@^5.5.0:
   version "5.6.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.6.1.tgz#c9e50c3e3717cf897f1b071ceadbb543bbc0a8d4"
 
-adm-zip@^0.4.4:
+adm-zip@^0.4.11:
   version "0.4.11"
   resolved "https://registry.yarnpkg.com/adm-zip/-/adm-zip-0.4.11.tgz#2aa54c84c4b01a9d0fb89bb11982a51f13e3d62a"
 
@@ -370,14 +370,14 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
 
-epub@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/epub/-/epub-0.2.0.tgz#492543b72f714dd14912969763371a9c70ff839d"
+"epub@https://github.com/nemanjan00/epub.git#e1dcd0a":
+  version "0.2.1"
+  resolved "https://github.com/nemanjan00/epub.git#e1dcd0a7494b4922a3b0a0dc2787ee573b11c2cc"
   dependencies:
-    adm-zip "^0.4.4"
-    xml2js "^0.4.4"
+    adm-zip "^0.4.11"
+    xml2js "^0.4.19"
   optionalDependencies:
-    zipfile "^0.5.0"
+    zipfile "^0.5.11"
 
 escape-string-regexp@1.0.5, escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5:
   version "1.0.5"
@@ -1367,7 +1367,7 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
-xml2js@^0.4.4:
+xml2js@^0.4.19:
   version "0.4.19"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.19.tgz#686c20f213209e94abf0d1bcf1efaa291c7827a7"
   dependencies:
@@ -1382,7 +1382,7 @@ yallist@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/yallist/-/yallist-2.1.2.tgz#1c11f9218f076089a47dd512f93c6699a6a81d52"
 
-zipfile@^0.5.0:
+zipfile@^0.5.11:
   version "0.5.11"
   resolved "https://registry.yarnpkg.com/zipfile/-/zipfile-0.5.11.tgz#a46c1b76706138fb9bcf83890193caec679f685e"
   dependencies:
