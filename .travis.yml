@@ -17,5 +17,4 @@ jobs:
       script:
         - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/nemanjan00/fossa-cli/patch-1/install.sh | bash"
         - fossa
-        - fossa test
 
