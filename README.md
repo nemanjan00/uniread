@@ -17,6 +17,8 @@ Uniread is Spritz like CLI fast reading software.
 
 ## Supported ebook types
 
+We try to support as much as possible of ebook formats. If you have any kind of requests, feel free to create feature request in [issues](https://github.com/nemanjan00/uniread/issues).
+
  * epub (thanks to [julien-c/epub](https://github.com/julien-c/epub) library)
 
 ## Developers guide
