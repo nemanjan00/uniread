@@ -12,5 +12,8 @@
   },
   "scripts": {
     "get-books": "./devScripts/getBooks.sh"
+  },
+  "bin": {
+    "uniread": "./bin/uniread.js"
   }
 }
