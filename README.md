@@ -1,5 +1,7 @@
 # uniread
 
+[![Build Status](https://travis-ci.org/nemanjan00/uniread.svg?branch=master)](https://travis-ci.org/nemanjan00/uniread)
+
 Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 
 ## Content
