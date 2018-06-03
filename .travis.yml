@@ -5,6 +5,9 @@ sudo: required
 node_js: 
   - 10.3.0
 
+env: 
+  - FOSSA_API_TOKEN=66bd200348ad2a6be376fdf548e63a2e
+
 jobs: 
   include:
     - stage: test
@@ -13,5 +16,5 @@ jobs:
     - stage: fossa
       script:
         - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/nemanjan00/fossa-cli/patch-1/install.sh | bash"
-        - FOSSA_API_TOKEN=66bd200348ad2a6be376fdf548e63a2e fossa
+        - fossa
 
