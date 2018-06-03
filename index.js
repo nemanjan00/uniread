@@ -1,3 +1,3 @@
 // For a better app detection
 
-require("./src");
+module.exports = require("./src");
