@@ -1,20 +1,16 @@
 language: node_js
-
 sudo: required
-
-node_js: 
-  - 10.3.0
-
-env: 
-  - FOSSA_API_KEY=66bd200348ad2a6be376fdf548e63a2e
-
-jobs: 
+node_js:
+- 10.3.0
+env:
+  secure: SuSmgXeOCp+xP6WcrmV0hrh6nInHt2MbZDKde8Q07M2EWdxeYCArofK5tiIZTwgfzsc8yTIFQmLNKpZlRnPsotrYjqpqvOM4xjAgbxWa1n+U9fRqKGLKPfVxucO0QhT9FaBJf2GOZF9PcCDBbHYIO+jbnk1YsBY+nwY24YePrAnkoHBbmaAqIwxhWa9oHul81Pcj7OaOQQWJL65oaDmzqGQd5ZUGSnHvq6axpJfKD2WZWOba47or+rV3144SNUfBqdR6YLJRPB2U9fQMCtnKxi4cnR4BarwVwvNo0CL3sNIcdIYrcnNZM0qZKaznL9ZE1L/C2+b4R+7mBeO0uXJqTUgq8WXxpn0bgYEkk4H7s01yEP6xTf9BL+cUrgTliWrPHhkz8GsS/wa4nKj5uEoeNjlfjOsUgmU0v1qAvmMTAZTS/DymyxHA8b7Tip37sZdRb5Eb91gByLyIHTr0R8cbYTaKQyShJD7n1C10ZlQgW8pvzK831/Hu38Jni5JZifdrbrOvJ5VPxAN9k4msJ/CfhPwdbJtdXdKx8eQPCS8pSaio6poJLLlvjJdhnLuNdOhXTciUXZ2vc3T+YEQ+YeAN9sVU002Kts3UbKX/4JmLY7FVLATjKHpH1LYfWWZeMWWIVQAFz/lF8t4cQJT0gM8uSfp5SpWTZeq4EiQajaNpqnk=
+jobs:
   include:
-    - stage: test
-      script: 
-        - yarn test
-    - stage: fossa
-      script:
-        - "curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/nemanjan00/fossa-cli/patch-1/install.sh | bash"
-        - fossa
-
+  - stage: test
+    script:
+    - yarn test
+  - stage: fossa
+    script:
+    - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/nemanjan00/fossa-cli/patch-1/install.sh
+      | bash'
+    - fossa
