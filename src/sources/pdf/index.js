@@ -8,6 +8,11 @@ module.exports = (filename) => {
 
 		getTitle: () => {
 			return "";
+		},
+		getChapters: () => {
+			return new Promise((resolve) => {
+				resolve(123);	
+			});
 		}
 	};
 
