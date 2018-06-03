@@ -16,6 +16,7 @@ Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 	* [Getting sample books for testing](#getting-sample-books-for-testing)
 	* [Coding Style](#coding-style)
 		* [Linting](#linting)
+	* [Testing](#testing)
 * [Authors](#authors)
 
 <!-- vim-markdown-toc -->
@@ -61,6 +62,16 @@ Coding style of this project is defined inside ``.editorconfig`` and to use it, 
 #### Linting
 
 For linting, we are using eslinter and to run it, you can just use: 
+
+### Testing
+
+To run tests, we use mocha. 
+
+To run it, simply: 
+
+```
+yarn test
+```
 
 ```bash
 yarn lint
