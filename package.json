@@ -11,9 +11,13 @@
     "epub": "^0.2.0"
   },
   "scripts": {
-    "get-books": "./devScripts/getBooks.sh"
+    "get-books": "./devScripts/getBooks.sh",
+    "lint": "./node_modules/.bin/eslint . --fix"
   },
   "bin": {
     "uniread": "./bin/uniread.js"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1"
   }
 }

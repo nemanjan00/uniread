@@ -33,6 +33,12 @@ To install it, run:
 sudo npm install -g yarn
 ```
 
+After that, you need to install dependencies, using: 
+
+```bash
+yarn
+```
+
 ### Getting sample books for testing
 
 Books source: https://pressbooks.com/sample-books/
