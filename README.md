@@ -8,6 +8,7 @@ Uniread is Spritz like CLI fast reading software.
 
 * [Developers guide](#developers-guide)
 	* [Getting sample books for testing](#getting-sample-books-for-testing)
+	* [Coding Style](#coding-style)
 * [Authors](#authors)
 
 <!-- vim-markdown-toc -->
@@ -23,6 +24,10 @@ To download books, run
 ```bash
 ./getBooks.sh
 ```
+
+### Coding Style
+
+Coding style of this project is defined inside ``.editorconfig`` and to use it, download [Editor Config plugin](https://editorconfig.org/) for your text editor. 
 
 ## Authors
 
