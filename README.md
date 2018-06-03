@@ -7,6 +7,7 @@ Uniread is Spritz like CLI fast reading software.
 <!-- vim-markdown-toc GFM -->
 
 * [Developers guide](#developers-guide)
+	* [Yarn package manager](#yarn-package-manager)
 	* [Getting sample books for testing](#getting-sample-books-for-testing)
 	* [Coding Style](#coding-style)
 * [Authors](#authors)
@@ -14,6 +15,16 @@ Uniread is Spritz like CLI fast reading software.
 <!-- vim-markdown-toc -->
 
 ## Developers guide
+
+### Yarn package manager
+
+For this project development, we are using faster, [yarn](https://yarnpkg.com/lang/en/) package manager. 
+
+To install it, run: 
+
+```bash
+sudo npm install -g yarn
+```
 
 ### Getting sample books for testing
 
