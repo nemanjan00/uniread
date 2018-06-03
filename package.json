@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
-    "epub": "https://github.com/nemanjan00/epub.git#e1dcd0a"
+    "epub": "https://github.com/nemanjan00/epub.git#e20d14c"
   },
   "scripts": {
     "get-books": "./devScripts/getBooks.sh",
