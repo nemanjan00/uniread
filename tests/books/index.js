@@ -52,10 +52,10 @@ describe("Book engines", function() {
 	});
 
 
-	describe("pdf book engine", function() {
-		it("Decodes pdf book into uniread format", function(done) {
-			validateBookFormat(pdf, "./books/Metamorphosis-jackson.pdf", done);
-		});
-	});
+	//describe("pdf book engine", function() {
+		//it("Decodes pdf book into uniread format", function(done) {
+			//validateBookFormat(pdf, "./books/Metamorphosis-jackson.pdf", done);
+		//});
+	//});
 });
 
