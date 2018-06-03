@@ -22,7 +22,7 @@ Books source: https://pressbooks.com/sample-books/
 To download books, run
 
 ```bash
-./getBooks.sh
+yarn get-books
 ```
 
 ### Coding Style

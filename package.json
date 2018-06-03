@@ -9,5 +9,8 @@
   "private": false,
   "dependencies": {
     "epub": "^0.2.0"
+  },
+  "scripts": {
+    "get-books": "./devScripts/getBooks.sh"
   }
 }
