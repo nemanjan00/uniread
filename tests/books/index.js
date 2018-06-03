@@ -5,6 +5,8 @@ const expect = require("chai").expect;
 const epub = require("../../src/sources/epub");
 const pdf = require("../../src/sources/pdf");
 
+const sources = require("../../src/sources");
+
 const validateBookFormat = (engine, file, done) => {
 	let promise = engine(file);
 
@@ -57,5 +59,11 @@ describe("Book engines", function() {
 			//validateBookFormat(pdf, "./books/Metamorphosis-jackson.pdf", done);
 		//});
 	//});
+
+	describe("Auto detection book engine", function() {
+		it("Detects engine", function() {
+			expect(sources._detectEngine("./books/Metamorphosis-jackson.epub")).to.equal(sources.engines.epub);
+		});
+	});
 });
 
