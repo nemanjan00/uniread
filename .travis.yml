@@ -6,7 +6,7 @@ node_js:
   - 10.3.0
 
 env: 
-  - FOSSA_API_TOKEN=66bd200348ad2a6be376fdf548e63a2e
+  - FOSSA_API_KEY=66bd200348ad2a6be376fdf548e63a2e
 
 jobs: 
   include:
