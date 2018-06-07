@@ -120,7 +120,7 @@ module.exports = (book) => {
 		},
 
 		_focusText: (text) => {
-			let length = 1;
+			let length = Math.ceil((7 - text.length) / 2);
 
 			for(let i = length; i > 0; i--){
 				text = " " + text;
