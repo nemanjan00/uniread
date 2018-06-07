@@ -6,7 +6,7 @@
 
 Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 
-![Screencast](https://github.com/nemanjan00/uniread/blob/master/screencast/spritz.webm?raw=true)
+![Screencast](https://github.com/nemanjan00/uniread/blob/master/screencast/spritz.raw?raw=true&1234)
 
 ## Content
 
