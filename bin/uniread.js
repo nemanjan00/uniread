@@ -24,11 +24,10 @@ const notifier = updateNotifier({
 		} else {
 			notifier.update = response;
 
-			notifier.notify({defer: false});
+			notifier.notify({defer: false, isGlobal: true});
 
 			setTimeout(run, 2000);
 		}
-	},
-	isGlobal: true
+	}
 });
 
