@@ -6,6 +6,8 @@
 
 Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 
+![Screencast]()https://github.com/nemanjan00/uniread/blob/master/screencast/spritz.gif?raw=true)
+
 ## Content
 
 <!-- vim-markdown-toc GFM -->
