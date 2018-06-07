@@ -14,8 +14,7 @@
     "epub": "https://github.com/nemanjan00/epub.git#e1dcd0a",
     "file-type": "^8.0.0",
     "snyk": "^1.82.1",
-    "textversionjs": "^1.1.1",
-    "update-notifier": "^2.5.0"
+    "textversionjs": "^1.1.1"
   },
   "scripts": {
     "get-books": "./devScripts/getBooks.sh",

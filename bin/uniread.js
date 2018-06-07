@@ -14,7 +14,6 @@ const run = () => {
 
 const notifier = updateNotifier({
 	pkg: pkg,
-	defer: false,
 	callback: (error, response) => {
 		if(error){
 			run();
@@ -23,12 +22,13 @@ const notifier = updateNotifier({
 		if(response.type == "latest"){
 			run();
 		} else {
-			console.log("Please, update, using: sudo npm install -g uniread");
+			notifier.update = response;
+
+			notifier.notify({defer: false});
+
 			setTimeout(run, 2000);
 		}
 	},
 	isGlobal: true
 });
-
-notifier.notify();
 
