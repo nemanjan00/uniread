@@ -12,13 +12,16 @@
     "blessed-contrib": "^4.8.5",
     "epub": "https://github.com/nemanjan00/epub.git#e1dcd0a",
     "file-type": "^8.0.0",
-    "textversionjs": "^1.1.1"
+    "textversionjs": "^1.1.1",
+    "snyk": "^1.82.1"
   },
   "scripts": {
     "get-books": "./devScripts/getBooks.sh",
     "lint": "./node_modules/.bin/eslint . --fix",
     "test": "./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
-    "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js"
+    "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "bin": {
     "uniread": "./bin/uniread.js"
@@ -29,5 +32,6 @@
     "eslint": "^4.19.1",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2"
-  }
+  },
+  "snyk": true
 }
