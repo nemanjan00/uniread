@@ -144,13 +144,17 @@ module.exports = (book) => {
 		},
 
 		_tickFunction: () => {
+			let next = player._book.text[player._current - 1] || "";
+
+			player._screen.debug(next);
+
 			player._tick = setTimeout(() => {
 				player._draw();
 
 				player._current++;
 
 				player._tickFunction();
-			}, player._speed);
+			}, ((next.indexOf(",") !== -1 || next.indexOf(".") !== -1)?2:1) * player._speed);
 		},
 
 		_focusText: (text) => {
