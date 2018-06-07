@@ -68,7 +68,3 @@ module.exports = {
 	}
 };
 
-module.exports.getBook("./books/Metamorphosis-jackson.epub").then((book) => {
-	console.log(book);
-});
-
