@@ -126,7 +126,7 @@ module.exports = (book) => {
 				text = " " + text;
 			}
 
-			return text+"\n  ^";
+			return text+"\n   ^";
 		},
 
 		togglePlay: () => {
