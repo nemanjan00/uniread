@@ -8,6 +8,8 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "blessed": "^0.1.81",
+    "blessed-contrib": "^4.8.5",
     "epub": "https://github.com/nemanjan00/epub.git#e1dcd0a",
     "file-type": "^8.0.0",
     "textversionjs": "^1.1.1"

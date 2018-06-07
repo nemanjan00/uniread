@@ -1,4 +1,10 @@
 #!/usr/bin/env node
 
-require("../").uniread();
+const uniread = require("../").uniread;
+const spritz = require("../").spritz;
+
+uniread.getBook(process.argv[process.argv.length - 1]).then((book) => {
+	spritz(book);
+});
+
 
