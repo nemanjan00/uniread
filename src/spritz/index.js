@@ -97,11 +97,11 @@ module.exports = (book) => {
 				player.togglePlay();
 			});
 
-			player._screen.key(["j"], function() {
+			player._screen.key(["j", "down"], function() {
 				player._chapterList.down();
 			});
 
-			player._screen.key(["k"], function() {
+			player._screen.key(["k", "up"], function() {
 				player._chapterList.up();
 			});
 
@@ -113,7 +113,7 @@ module.exports = (book) => {
 				player._speed -= 10;
 			});
 
-			player._screen.key(["h"], function() {
+			player._screen.key(["h", "left"], function() {
 				if(player._current > 0){
 					player._current--;
 				}
@@ -121,7 +121,7 @@ module.exports = (book) => {
 				player._draw();
 			});
 
-			player._screen.key(["l"], function() {
+			player._screen.key(["l", "right"], function() {
 				player._current++;
 
 				player._draw();
