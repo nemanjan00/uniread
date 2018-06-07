@@ -12,17 +12,22 @@ const run = () => {
 	});
 };
 
-const notifier = updateNotifier({pkg: pkg, defer: false, callback: (error, response) => {
-	if(error){
-		run();
-	}
+const notifier = updateNotifier({
+	pkg: pkg,
+	defer: false,
+	callback: (error, response) => {
+		if(error){
+			run();
+		}
 
-	if(response.type == "latest"){
-		run();
-	} else {
-		setTimeout(run, 2000);
-	}
-}});
+		if(response.type == "latest"){
+			run();
+		} else {
+			setTimeout(run, 2000);
+		}
+	},
+	isGlobal: true
+});
 
 notifier.notify();
 
