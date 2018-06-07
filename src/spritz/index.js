@@ -25,6 +25,8 @@ module.exports = (book) => {
 				label: "Book"
 			});
 
+			book.links = book.links.filter((chapter) => chapter.name !== undefined);
+
 			let chapters = book.links.map(link => link.name);
 
 			player._chapterList = grid.set(0, 0, 11, 6, blessed.list, {
