@@ -13,6 +13,8 @@ Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 <!-- vim-markdown-toc GFM -->
 
 * [Supported ebook types](#supported-ebook-types)
+* [Installation](#installation)
+* [Usage](#usage)
 * [Developers guide](#developers-guide)
 	* [Yarn package manager](#yarn-package-manager)
 	* [Getting sample books for testing](#getting-sample-books-for-testing)
@@ -28,6 +30,18 @@ Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 We try to support as much as possible of ebook formats. If you have any kind of requests, feel free to create feature request in [issues](https://github.com/nemanjan00/uniread/issues).
 
  * epub (thanks to [julien-c/epub](https://github.com/julien-c/epub) library)
+
+## Installation
+
+```bash
+sudo npm install -g uniread
+```
+
+## Usage
+
+```bash
+uniread ~/Books/somebook.epub
+```
 
 ## Developers guide
 
