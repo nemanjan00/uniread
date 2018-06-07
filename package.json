@@ -20,8 +20,7 @@
     "lint": "./node_modules/.bin/eslint . --fix",
     "test": "./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
     "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
-    "snyk-protect": "snyk protect",
-    "prepare": "yarn snyk-protect"
+    "snyk-protect": "snyk protect"
   },
   "bin": {
     "uniread": "./bin/uniread.js"
