@@ -27,7 +27,7 @@ module.exports = (book) => {
 
 			let chapters = book.links.map(link => link.name);
 
-			player._chapterList = grid.set(0, 0, 12, 6, blessed.list, {
+			player._chapterList = grid.set(0, 0, 11, 6, blessed.list, {
 				style: {
 					selected: {
 						bg: "red"
@@ -38,8 +38,18 @@ module.exports = (book) => {
 				mouse: true
 			});
 
+			let help = grid.set(11, 0, 1, 12, blessed.text, {
+				style: {
+					selected: {
+						bg: "red"
+					}
+				},
+				label: "help",
+			});
+
+			help.append(blessed.text({label: "j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward"}));
+
 			player._text = blessed.text({
-				mouse: true,
 				label: "Book"
 			});
 
@@ -61,6 +71,28 @@ module.exports = (book) => {
 				player._chapterList.up();
 			});
 
+			player._screen.key(["-"], function() {
+				player._speed += 10;
+			});
+
+			player._screen.key(["+"], function() {
+				player._speed -= 10;
+			});
+
+			player._screen.key(["h"], function() {
+				if(player._current > 0){
+					player._current--;
+				}
+
+				player._draw();
+			});
+
+			player._screen.key(["l"], function() {
+				player._current++;
+
+				player._draw();
+			});
+
 			player._screen.render();
 
 			player._book = book;
@@ -72,10 +104,16 @@ module.exports = (book) => {
 			player.togglePlay();
 		},
 
+		_draw: () => {
+			player._text.setLabel(player._focusText(player._book.text[player._current]));
+			player._screen.render();
+		},
+
 		_tickFunction: () => {
 			player._tick = setTimeout(() => {
-				player._text.setLabel(player._focusText(player._book.text[player._current++]));
-				player._screen.render();
+				player._draw();
+
+				player._current++;
 
 				player._tickFunction();
 			}, player._speed);
