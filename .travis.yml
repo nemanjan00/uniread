@@ -11,6 +11,6 @@ jobs:
     - yarn test
   - stage: fossa
     script:
-    - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/nemanjan00/fossa-cli/patch-1/install.sh
+    - 'curl -H ''Cache-Control: no-cache'' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh
       | bash'
     - fossa
