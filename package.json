@@ -1,6 +1,6 @@
 {
   "name": "uniread",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Uniread is Spritz like CLI fast reading software. ",
   "main": "index.js",
   "repository": "https://github.com/nemanjan00/uniread",
@@ -20,7 +20,7 @@
     "lint": "./node_modules/.bin/eslint . --fix",
     "test": "./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
     "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
-    "snyk-protect": "./node_module/.bin/snyk protect",
+    "snyk-protect": "snyk protect",
     "prepare": "yarn snyk-protect"
   },
   "bin": {
