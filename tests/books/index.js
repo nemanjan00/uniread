@@ -70,9 +70,9 @@ describe("Book engines", function() {
 
 
 	//describe("pdf book engine", function() {
-		//it("Decodes pdf book into uniread format", function(done) {
-			//validateBookFormat(pdf, "./books/Metamorphosis-jackson.pdf", done);
-		//});
+	//it("Decodes pdf book into uniread format", function(done) {
+	//validateBookFormat(pdf, "./books/Metamorphosis-jackson.pdf", done);
+	//});
 	//});
 
 	describe("Auto detection book engine", function() {

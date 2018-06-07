@@ -1,6 +1,6 @@
 module.exports = (filename) => {
 	const book = {
-		_init: (filename) => {
+		_init: () => {
 			return new Promise((resolve) => {
 				resolve(book);
 			});

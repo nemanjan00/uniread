@@ -1,7 +1,7 @@
 /* global describe */
 
 describe("Unichat", function() {
-	require("./devTools")	
+	require("./devTools");	
 	require("./books");
 });
 

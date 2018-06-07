@@ -9,7 +9,8 @@
   "private": false,
   "dependencies": {
     "epub": "https://github.com/nemanjan00/epub.git#e1dcd0a",
-    "file-type": "^8.0.0"
+    "file-type": "^8.0.0",
+    "textversionjs": "^1.1.1"
   },
   "scripts": {
     "get-books": "./devScripts/getBooks.sh",

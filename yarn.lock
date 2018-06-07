@@ -2404,6 +2404,10 @@ text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
+textversionjs@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/textversionjs/-/textversionjs-1.1.1.tgz#306199fa94b62ca9ba8fc2c48e22ba036cd9e81f"
+
 through@^2.3.6:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
