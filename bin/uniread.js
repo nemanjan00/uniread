@@ -23,6 +23,7 @@ const notifier = updateNotifier({
 		if(response.type == "latest"){
 			run();
 		} else {
+			console.log("Please, update, using: sudo npm install -g uniread");
 			setTimeout(run, 2000);
 		}
 	},
