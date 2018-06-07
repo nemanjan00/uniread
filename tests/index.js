@@ -3,5 +3,6 @@
 describe("Unichat", function() {
 	require("./devTools");	
 	require("./books");
+	require("./uniread");
 });
 
