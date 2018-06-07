@@ -1,4 +1,4 @@
-const dateformat = require('dateformat');
+const dateformat = require("dateformat");
 
 const blessed = require("blessed");
 const contrib = require("blessed-contrib");
