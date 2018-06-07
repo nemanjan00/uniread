@@ -47,7 +47,7 @@ module.exports = (book) => {
 				label: "help",
 			});
 
-			help.append(blessed.text({label: "j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward"}));
+			help.append(blessed.text({label: "space pause | j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward"}));
 
 			player._text = blessed.text({
 				label: "Book"
