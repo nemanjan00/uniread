@@ -1,4 +1,4 @@
-const uniread = require("../uniread");
+const dateformat = require('dateformat');
 
 const blessed = require("blessed");
 const contrib = require("blessed-contrib");
@@ -16,6 +16,26 @@ module.exports = (book) => {
 
 		_tick: undefined,
 
+		_report: () => {
+			return "Speed: " + player._speed + "ms\nProgress: " + player._current + "/" + player._book.text.length + "\nTime left: " + player._niceTime();
+		},
+
+		_niceTime: () => {
+			let wordsPerSeconds = (1 / player._speed * 1000);
+
+			let timeLeft = Math.round((player._book.text.length - player._current)/wordsPerSeconds);
+
+			timeLeft = new Date(timeLeft *1000);
+
+			let response = dateformat(timeLeft, "UTC:hh:MM:ss");
+
+			if(timeLeft < 3600 * 1000){
+				response = response.replace("12", "00");
+			}
+
+			return response;
+		},
+
 		_init: (book) => {
 			player._screen = blessed.screen({debug: true});
 
@@ -28,6 +48,18 @@ module.exports = (book) => {
 			book.links = book.links.filter((chapter) => chapter.name !== undefined);
 
 			let chapters = book.links.map(link => link.name);
+
+			player._book = book;
+
+			player._reportBox = grid.set(2, 6, 2, 6, blessed.box, {
+				label: "Info"
+			});
+
+			player._reportText = blessed.text({
+				label: player._report()
+			});
+
+			player._reportBox.append(player._reportText);
 
 			player._chapterList = grid.set(0, 0, 11, 6, blessed.list, {
 				style: {
@@ -97,8 +129,6 @@ module.exports = (book) => {
 
 			player._screen.render();
 
-			player._book = book;
-
 			player._chapterList.on("select item", (element, key) => {
 				player._current = player._book.links[key].word;
 			});
@@ -107,6 +137,8 @@ module.exports = (book) => {
 		},
 
 		_draw: () => {
+			player._reportText.setLabel(player._report());
+
 			player._text.setLabel(player._focusText(player._book.text[player._current]));
 			player._screen.render();
 		},
