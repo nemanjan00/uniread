@@ -154,7 +154,11 @@ module.exports = (book) => {
 				player._current++;
 
 				player._tickFunction();
-			}, ((next.indexOf(",") !== -1 || next.indexOf(".") !== -1)?2:1) * player._speed);
+			}, ((next.indexOf(",") !== -1 
+				|| next.indexOf(".") !== -1 
+				|| next.indexOf("?") !== -1
+				|| next.indexOf("!") !== -1
+				|| next.indexOf(";") !== -1)?2:1) * player._speed);
 		},
 
 		_focusText: (text) => {
