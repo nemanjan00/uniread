@@ -3,6 +3,8 @@
 const updateNotifier = require("update-notifier");
 const pkg = require("../package.json");
 
+const fs = require("fs");
+
 const uniread = require("../").uniread;
 const spritz = require("../").spritz;
 
@@ -11,7 +13,7 @@ let timeout = false;
 const run = () => {
 	uniread.getBook(process.argv[process.argv.length - 1]).then((book) => {
 		spritz(book);
-	});
+	}).catch("Book format not supported. ");
 };
 
 setTimeout(() => {
