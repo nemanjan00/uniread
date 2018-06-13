@@ -16,4 +16,5 @@ jobs:
     script:
     - bash ./devScripts/install.sh
     - fossa build
+    - fossa analyze
     - fossa upload
