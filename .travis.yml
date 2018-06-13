@@ -15,5 +15,5 @@ jobs:
   - stage: fossa
     script:
     - bash ./devScripts/install.sh
-    - fossa analyze
+    - fossa build
     - fossa upload
