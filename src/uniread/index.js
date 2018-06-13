@@ -10,11 +10,13 @@ String.prototype.replaceAll = function(search, replacement) {
 
 module.exports = {
 	getBook: (file) => {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			sources.detectEngine(file).then((book) => {
 				module.exports.transformBook(book).then((book) => {
 					resolve(book);
 				});
+			}).catch((error) => {
+				reject(error);
 			});
 		});
 	},

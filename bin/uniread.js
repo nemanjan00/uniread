@@ -11,9 +11,19 @@ const spritz = require("../").spritz;
 let timeout = false;
 
 const run = () => {
-	uniread.getBook(process.argv[process.argv.length - 1]).then((book) => {
+	let file = process.argv[process.argv.length - 1];
+
+	if(!fs.existsSync(file)){
+		console.log("File does not exist");
+		process.exit(1);
+	}
+
+	uniread.getBook(file).then((book) => {
 		spritz(book);
-	}).catch("Book format not supported. ");
+	}).catch(() => {
+		console.log("Book format not supported. ");
+		process.exit(1);
+	});
 };
 
 setTimeout(() => {
