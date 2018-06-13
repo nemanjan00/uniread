@@ -9,7 +9,7 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 const epub = require("../../src/sources/epub");
-//const pdf = require("../../src/sources/pdf");
+const pdf = require("../../src/sources/pdf");
 
 const sources = require("../../src/sources");
 
@@ -58,7 +58,8 @@ const validateBookFormat = (engine, file, done) => {
 };
 
 let files = [
-	"./books/Metamorphosis-jackson.epub"
+	"./books/Metamorphosis-jackson.epub",
+	"./books/Metamorphosis-jackson.pdf"
 ];
 
 describe("Book engines", function() {
@@ -69,14 +70,15 @@ describe("Book engines", function() {
 	});
 
 
-	//describe("pdf book engine", function() {
-	//it("Decodes pdf book into uniread format", function(done) {
-	//validateBookFormat(pdf, "./books/Metamorphosis-jackson.pdf", done);
-	//});
-	//});
+	describe("pdf book engine", function() {
+		it("Decodes pdf book into uniread format", function(done) {
+			validateBookFormat(pdf, "./books/Metamorphosis-jackson.pdf", done);
+		});
+	});
 
 	describe("Auto detection book engine", function() {
 		it("Detects engine", function() {
+			expect(sources._detectEngine("./books/Metamorphosis-jackson.pdf")).to.equal(sources.engines.pdf);
 			expect(sources._detectEngine("./books/Metamorphosis-jackson.epub")).to.equal(sources.engines.epub);
 			expect(sources._detectEngine("./index.js")).to.equal(false);
 			expect(sources._detectEngine("./books/Metamorphosis-jackson.mobi")).to.equal(false);

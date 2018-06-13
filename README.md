@@ -31,6 +31,8 @@ We try to support as much as possible of ebook formats. If you have any kind of 
 
  * epub (thanks to [julien-c/epub](https://github.com/julien-c/epub) library)
 
+ * pdf (thanks to [Mozilla pdf.js](https://github.com/mozilla/pdf.js) library)
+
 ## Installation / update
 
 ```bash

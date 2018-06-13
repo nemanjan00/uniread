@@ -13,6 +13,7 @@
     "dateformat": "^3.0.3",
     "epub": "https://github.com/nemanjan00/epub.git#e1dcd0a",
     "file-type": "^8.0.0",
+    "pdfjs-dist": "^2.0.489",
     "snyk": "^1.82.1",
     "textversionjs": "^1.1.1",
     "update-notifier": "^2.5.0"

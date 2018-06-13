@@ -2,7 +2,8 @@ const fileType = require("file-type");
 const fs = require("fs");
 
 const engines = {
-	epub: require("./epub")
+	epub: require("./epub"),
+	pdf: require("./pdf")
 };
 	
 
