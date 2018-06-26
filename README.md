@@ -81,6 +81,10 @@ Coding style of this project is defined inside ``.editorconfig`` and to use it, 
 
 For linting, we are using eslinter and to run it, you can just use: 
 
+```bash
+yarn lint
+```
+
 ### Testing
 
 To run tests, we use mocha. 
@@ -89,10 +93,6 @@ To run it, simply:
 
 ```
 yarn test
-```
-
-```bash
-yarn lint
 ```
 
 ## Authors
