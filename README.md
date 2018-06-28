@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/nemanjan00/uniread.svg?branch=master)](https://travis-ci.org/nemanjan00/uniread)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fnemanjan00%2Funiread.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fnemanjan00%2Funiread?ref=badge_shield)
 [![Known Vulnerabilities](https://snyk.io/test/github/nemanjan00/uniread/badge.svg)](https://snyk.io/test/github/nemanjan00/uniread)
+[![npm](https://img.shields.io/npm/dt/uniread.svg)](https://www.npmjs.com/package/uniread)
 
 Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 
