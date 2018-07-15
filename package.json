@@ -14,7 +14,7 @@
     "epub": "https://github.com/nemanjan00/epub.git#e1dcd0a",
     "file-type": "^8.0.0",
     "pdfjs-dist": "^2.0.489",
-    "snyk": "^1.82.1",
+    "snyk": "^1.88.2",
     "textversionjs": "^1.1.1",
     "update-notifier": "^2.5.0"
   },
@@ -24,7 +24,7 @@
     "test": "./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
     "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
     "snyk-protect": "snyk protect",
-    "prepare": "yarn snyk-protect"
+    "prepare": "npm run snyk-protect; yarn snyk-protect"
   },
   "bin": {
     "uniread": "./bin/uniread.js"
