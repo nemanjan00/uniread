@@ -15,5 +15,5 @@ jobs:
     - yarn test
   - stage: fossa
     script:
-      - fossa
+      - fossa analyze
       - fossa test
