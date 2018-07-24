@@ -95,24 +95,34 @@ module.exports = (book) => {
 
 			player._screen.key(["space"], function() {
 				player.togglePlay();
+
+				player._draw();
 			});
 
 			player._screen.key(["j", "down"], function() {
 				player._chapterList.down();
+
+				player._draw();
 			});
 
 			player._screen.key(["k", "up"], function() {
 				player._chapterList.up();
+
+				player._draw();
 			});
 
 			player._screen.key(["-"], function() {
 				player._speed += 10;
+
+				player._draw();
 			});
 
 			player._screen.key(["+"], function() {
-				if(player.speed > 10){
+				if(player._speed > 10){
 					player._speed -= 10;
 				}
+
+				player._draw();
 			});
 
 			player._screen.key(["h", "left"], function() {
