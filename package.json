@@ -23,6 +23,7 @@
     "lint": "./node_modules/.bin/eslint . --fix",
     "test": "./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
     "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
+    "watch-cli": "nodemon ./bin/uniread.js",
     "snyk-protect": "snyk protect",
     "prepare": "yarn snyk-protect"
   },
@@ -34,6 +35,7 @@
     "chai-as-promised": "^7.1.1",
     "eslint": "^4.19.1",
     "mocha": "^5.2.0",
+    "nodemon": "^1.18.3",
     "nyc": "^12.0.2"
   },
   "snyk": true
