@@ -110,7 +110,9 @@ module.exports = (book) => {
 			});
 
 			player._screen.key(["+"], function() {
-				player._speed -= 10;
+				if(player.speed > 10){
+					player._speed -= 10;
+				}
 			});
 
 			player._screen.key(["h", "left"], function() {
