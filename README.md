@@ -100,3 +100,5 @@ yarn test
 
  * [Nemanja Nedeljković](https://github.com/nemanjan00)
 
+Also, huge thanks to [these](https://github.com/nemanjan00/uniread/graphs/contributors) people. 
+
