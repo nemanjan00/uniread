@@ -1,6 +1,6 @@
 // TODO: Do tests
 
-const sources = require("../sources/");
+const sources = require("../../sources/");
 const textVersion = require("textversionjs");
 
 String.prototype.replaceAll = function(search, replacement) {

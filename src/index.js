@@ -1,6 +1,6 @@
 module.exports = {
-	uniread: require("./uniread"),
-	spritz: require("./spritz"),
+	cli: require("./cli"),
+	methods: require("./methods"),
 	sources: require("./sources")
 };
 

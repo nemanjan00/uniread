@@ -5,8 +5,8 @@ const pkg = require("../package.json");
 
 const fs = require("fs");
 
-const uniread = require("../").uniread;
-const spritz = require("../").spritz;
+const cli = require("../").cli;
+const spritz = require("../").methods.spritz;
 
 let timeout = false;
 
@@ -18,8 +18,8 @@ const run = () => {
 		process.exit(1);
 	}
 
-	uniread.getBook(file).then((book) => {
-		spritz(book);
+	spritz.getBook(file).then((book) => {
+		cli(book);
 	}).catch(() => {
 		console.log("Book format not supported. ");
 		process.exit(1);

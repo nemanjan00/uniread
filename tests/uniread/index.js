@@ -1,6 +1,6 @@
 /* global describe */
 
-require("../../src/uniread");
+require("../../src/methods/spritz");
 
 describe("Uniread book engine", function() {
 });
