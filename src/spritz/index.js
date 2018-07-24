@@ -81,14 +81,14 @@ module.exports = (book) => {
 				label: "help",
 			});
 
-			help.append(blessed.text({label: "space pause | j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward"}));
+			help.append(blessed.text({label: "space pause | j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward | q escape "}));
 
 			player._text = blessed.text({
 				label: "Book"
 			});
 
 			player._textBox.append(player._text);
-	
+
 			player._screen.key(["escape", "q", "C-c"], function() {
 				return process.exit(0);
 			});
