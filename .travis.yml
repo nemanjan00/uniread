@@ -16,4 +16,3 @@ jobs:
   - stage: fossa
     script:
       - fossa
-      - fossa test
