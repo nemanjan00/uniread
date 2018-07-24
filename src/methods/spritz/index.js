@@ -8,6 +8,12 @@ String.prototype.replaceAll = function(search, replacement) {
 	return target.replace(new RegExp(search, "g"), replacement);
 };
 
+const textVersionConfig = {
+	linkProcess: (_, linkText) => linkText,
+	imgProcess: (_, alt) => alt,
+	headingStyle: "hashify"
+};
+
 module.exports = {
 	getBook: (file) => {
 		return new Promise((resolve, reject) => {
@@ -26,7 +32,7 @@ module.exports = {
 
 			book.getChapters().then((chapters) => {
 				chapters = chapters.map((chapter) => {
-					chapter.content = textVersion(chapter.content);
+					chapter.content = textVersion(chapter.content, textVersionConfig);
 
 					return chapter;
 				});
