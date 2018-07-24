@@ -5,7 +5,7 @@ const pkg = require("../package.json");
 
 const fs = require("fs");
 
-const cli = require("../").cli;
+const cli = require("../").interfaces.cli;
 const spritz = require("../").methods.spritz;
 
 let timeout = false;
@@ -20,7 +20,7 @@ const run = () => {
 
 	spritz.getBook(file).then((book) => {
 		cli(book);
-	}).catch(() => {
+	}).catch((err) => {
 		console.log("Book format not supported. ");
 		process.exit(1);
 	});

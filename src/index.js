@@ -1,5 +1,5 @@
 module.exports = {
-	cli: require("./cli"),
+	interfaces: require("./interfaces"),
 	methods: require("./methods"),
 	sources: require("./sources")
 };
