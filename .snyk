@@ -6,3 +6,52 @@ patch:
   'npm:request:20160119':
     - blessed-contrib > picture-tube > request:
         patched: '2018-06-07T13:00:00.547Z'
+  'npm:hoek:20180212':
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > npm-lifecycle > node-gyp > request > hawk > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > npm-lifecycle > node-gyp > request > hawk > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > npm-lifecycle > node-gyp > request > hawk > sntp > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > npm-lifecycle > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > sntp > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > node-gyp > request > hawk > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > node-gyp > request > hawk > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > node-gyp > request > hawk > sntp > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > drawille-canvas-blessed-contrib > gl-matrix > npm > npm-lifecycle > node-gyp > request > hawk > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > npm-lifecycle > node-gyp > request > hawk > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > npm-lifecycle > node-gyp > request > hawk > sntp > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > npm-lifecycle > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > sntp > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > node-gyp > request > hawk > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > node-gyp > request > hawk > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > node-gyp > request > hawk > sntp > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
+    - blessed-contrib > map-canvas > drawille-canvas-blessed-contrib > gl-matrix > npm > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-07-15T21:56:06.384Z'
