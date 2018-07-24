@@ -26,7 +26,8 @@
     "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
     "watch-cli": "nodemon -I ./bin/uniread.js",
     "snyk-protect": "snyk protect",
-    "prepare": "yarn snyk-protect"
+    "prepare": "yarn snyk-protect",
+    "depUpdate": "./devScripts/update.sh"
   },
   "bin": {
     "uniread": "./bin/uniread.js"
