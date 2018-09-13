@@ -14,10 +14,12 @@
     "epub": "https://github.com/nemanjan00/epub.git#67e7822d0be55f9cb0594f23dd034e2358439f63",
     "file-type": "^8.0.0",
     "minimist": "^1.2.0",
+    "opencollective-postinstall": "^2.0.0",
     "pdfjs-dist": "^2.0.489",
     "snyk": "^1.82.1",
     "textversionjs": "^1.1.1",
-    "update-notifier": "^2.5.0"
+    "update-notifier": "^2.5.0",
+    "opencollective": "^1.0.3"
   },
   "scripts": {
     "get-books": "./devScripts/getBooks.sh",
@@ -27,7 +29,8 @@
     "watch-cli": "nodemon -I ./bin/uniread.js",
     "snyk-protect": "snyk protect",
     "prepare": "yarn snyk-protect",
-    "depUpdate": "./devScripts/update.sh"
+    "depUpdate": "./devScripts/update.sh",
+    "postinstall": "opencollective-postinstall"
   },
   "bin": {
     "uniread": "./bin/uniread.js"
@@ -40,5 +43,9 @@
     "nodemon": "^1.18.3",
     "nyc": "^12.0.2"
   },
-  "snyk": true
+  "snyk": true,
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/uniread"
+  }
 }
