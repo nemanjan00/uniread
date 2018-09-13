@@ -18,8 +18,7 @@
     "pdfjs-dist": "^2.0.489",
     "snyk": "^1.82.1",
     "textversionjs": "^1.1.1",
-    "update-notifier": "^2.5.0",
-    "opencollective": "^1.0.3"
+    "update-notifier": "^2.5.0"
   },
   "scripts": {
     "get-books": "./devScripts/getBooks.sh",
