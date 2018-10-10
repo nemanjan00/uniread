@@ -3,7 +3,8 @@ const fs = require("fs");
 
 const engines = {
 	epub: require("./epub"),
-	pdf: require("./pdf")
+	pdf: require("./pdf"),
+	text: require("./text")
 };
 	
 
@@ -14,12 +15,13 @@ module.exports = {
 
 		const type = fileType(data);
 
-		if(!type){
-			return false;
+		if(type !== null && engines[type.ext] !== undefined){
+			return engines[type.ext];
 		}
 
-		if(engines[type.ext] !== undefined){
-			return engines[type.ext];
+		// `file-type` does not detect plaintext files
+		if(filename.endsWith(".txt")) {
+			return engines.text;
 		}
 
 		return false;

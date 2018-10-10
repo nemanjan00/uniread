@@ -21,7 +21,7 @@ const run = () => {
 	spritz.getBook(file).then((book) => {
 		cli(book);
 	}).catch(() => {
-		console.log("Book format not supported. ");
+		console.log("Book format not supported");
 		process.exit(1);
 	});
 };
