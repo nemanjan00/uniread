@@ -117,7 +117,7 @@ module.exports = (book) => {
 				player._draw();
 			});
 
-			player._screen.key(["+"], function() {
+			player._screen.key(["+", "="], function() {
 				if(player._speed > 10){
 					player._speed -= 10;
 				}
