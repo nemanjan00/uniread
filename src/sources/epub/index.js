@@ -33,7 +33,7 @@ module.exports = (filename) => {
 				let chapters = book._epub.flow.map(function(chapter){
 					let chapterResult = {
 						id: chapter.id,
-						title: chapter.title 
+						title: chapter.title
 					};
 
 					chaptersContent.push(book._getChapter(chapter.id));
