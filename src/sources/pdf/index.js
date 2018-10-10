@@ -6,6 +6,7 @@ const fs = require("fs");
 module.exports = (filename) => {
 	const book = {
 		_book: undefined,
+
 		_init: () => {
 			return new Promise((resolve) => {
 				fs.readFile(filename, function (err, data) {
@@ -20,22 +21,22 @@ module.exports = (filename) => {
 		},
 
 		getTitle: () => {
-			return "";
+			return filename;
 		},
 		getChapters: () => {
 			return new Promise((resolve) => {
 				book._readAllPages().then((content) => {
 					let chapters = [{
 						id: 1,
-						title: "Content not supported in pdf right now. ",
+						title: "Content not supported in pdf files yet.",
 						content: content.join(" ")
-					}];	
+					}];
 
 					resolve(chapters);
 				});
 			});
 		},
-		_readPage: function(id){
+		_readPage: (id) => {
 			var promise = new Promise(function(resolve){
 				book._book.getPage(id).then(function(page){
 					page.getTextContent().then(function(page){
@@ -54,10 +55,10 @@ module.exports = (filename) => {
 
 			return promise;
 		},
-		_readAllPages: function(){
+		_readAllPages: () => {
 			var promise = new Promise(function(resolve){
 				var pages = [];
-				
+
 				for(var i = 0; i < book._book.pdfInfo.numPages; i++){
 					pages.push(book._readPage(i + 1));
 				}
