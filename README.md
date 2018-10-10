@@ -6,7 +6,6 @@
 [![npm](https://img.shields.io/npm/dt/uniread.svg)](https://www.npmjs.com/package/uniread)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-
 Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 
 ![Screencast](https://github.com/nemanjan00/uniread/blob/master/screencast/spritz.gif?raw=true)
@@ -19,11 +18,11 @@ Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 * [Installation / update](#installation--update)
 * [Usage](#usage)
 * [Developers guide](#developers-guide)
-	* [Yarn package manager](#yarn-package-manager)
-	* [Getting sample books for testing](#getting-sample-books-for-testing)
-	* [Coding Style](#coding-style)
-		* [Linting](#linting)
-	* [Testing](#testing)
+  * [Yarn package manager](#yarn-package-manager)
+  * [Getting sample books for testing](#getting-sample-books-for-testing)
+  * [Coding Style](#coding-style)
+    * [Linting](#linting)
+  * [Testing](#testing)
 * [Authors](#authors)
 
 <!-- vim-markdown-toc -->
@@ -32,9 +31,8 @@ Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 
 We try to support as much as possible of ebook formats. If you have any kind of requests, feel free to create feature request in [issues](https://github.com/nemanjan00/uniread/issues).
 
- * epub (thanks to [julien-c/epub](https://github.com/julien-c/epub) library)
-
- * pdf (thanks to [Mozilla pdf.js](https://github.com/mozilla/pdf.js) library)
+* epub (thanks to [julien-c/epub](https://github.com/julien-c/epub) library)
+* pdf (thanks to [Mozilla pdf.js](https://github.com/mozilla/pdf.js) library)
 
 ## Installation / update
 
@@ -52,15 +50,15 @@ uniread ~/Books/somebook.epub
 
 ### Yarn package manager
 
-For this project development, we are using faster, [yarn](https://yarnpkg.com/lang/en/) package manager. 
+For this project development, we are using faster, [yarn](https://yarnpkg.com/lang/en/) package manager.
 
-To install it, run: 
+To install it, run:
 
 ```bash
 sudo npm install -g yarn
 ```
 
-After that, you need to install dependencies, using: 
+After that, you need to install dependencies, using:
 
 ```bash
 yarn
@@ -78,11 +76,11 @@ yarn get-books
 
 ### Coding Style
 
-Coding style of this project is defined inside ``.editorconfig`` and to use it, download [Editor Config plugin](https://editorconfig.org/) for your text editor. 
+Coding style of this project is defined inside `.editorconfig` and to use it, download [Editor Config plugin](https://editorconfig.org/) for your text editor.
 
 #### Linting
 
-For linting, we are using eslinter and to run it, you can just use: 
+For linting, we are using eslinter and to run it, you can just use:
 
 ```bash
 yarn lint
@@ -90,9 +88,9 @@ yarn lint
 
 ### Testing
 
-To run tests, we use mocha. 
+To run tests, we use mocha.
 
-To run it, simply: 
+To run it, simply:
 
 ```
 yarn test
@@ -100,23 +98,21 @@ yarn test
 
 ## Authors
 
- * [Nemanja Nedeljković](https://github.com/nemanjan00)
+* [Nemanja Nedeljković](https://github.com/nemanjan00)
 
-Also, huge thanks to [these](https://github.com/nemanjan00/uniread/graphs/contributors) people. 
-
+Also, huge thanks to [these](https://github.com/nemanjan00/uniread/graphs/contributors) people.
 
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/undefined/undefinedgraphs/contributors"><img src="https://opencollective.com/uniread/contributors.svg?width=890&button=false" /></a>
 
+<a href="https://github.com/undefined/undefinedgraphs/contributors"><img src="https://opencollective.com/uniread/contributors.svg?width=890&button=false" /></a>
 
 ## Backers
 
 Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/uniread#backer)]
 
 <a href="https://opencollective.com/uniread#backers" target="_blank"><img src="https://opencollective.com/uniread/backers.svg?width=890"></a>
-
 
 ## Sponsors
 
@@ -132,5 +128,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/uniread/sponsor/7/website" target="_blank"><img src="https://opencollective.com/uniread/sponsor/7/avatar.svg"></a>
 <a href="https://opencollective.com/uniread/sponsor/8/website" target="_blank"><img src="https://opencollective.com/uniread/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/uniread/sponsor/9/website" target="_blank"><img src="https://opencollective.com/uniread/sponsor/9/avatar.svg"></a>
-
-
