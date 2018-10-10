@@ -24,6 +24,9 @@ Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
     * [Linting](#linting)
   * [Testing](#testing)
 * [Authors](#authors)
+* [Contributors](#contributors)
+* [Backers](#backers)
+* [Sponsors](#sponsors)
 
 <!-- vim-markdown-toc -->
 
@@ -32,6 +35,7 @@ Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 We try to support as much as possible of ebook formats. If you have any kind of requests, feel free to create feature request in [issues](https://github.com/nemanjan00/uniread/issues).
 
 * epub (thanks to [julien-c/epub](https://github.com/julien-c/epub) library)
+* text (thanks to [pzmarzly](https://github.com/pzmarzly) and PR [#25](https://github.com/nemanjan00/uniread/pull/25))
 * pdf (thanks to [Mozilla pdf.js](https://github.com/mozilla/pdf.js) library)
 
 ## Installation / update
