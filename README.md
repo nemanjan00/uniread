@@ -110,7 +110,7 @@ Also, huge thanks to [these](https://github.com/nemanjan00/uniread/graphs/contri
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 
-<a href="https://github.com/undefined/undefinedgraphs/contributors"><img src="https://opencollective.com/uniread/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/nemanjan00/uniread/graphs/contributors"><img src="https://opencollective.com/uniread/contributors.svg?width=890&button=false" /></a>
 
 ## Backers
 
