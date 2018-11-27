@@ -1,6 +1,6 @@
 {
   "name": "uniread",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "Uniread is Spritz like CLI fast reading software. ",
   "main": "index.js",
   "repository": "https://github.com/nemanjan00/uniread",
