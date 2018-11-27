@@ -59,7 +59,7 @@ module.exports = (filename) => {
 			var promise = new Promise(function(resolve){
 				var pages = [];
 
-				for(var i = 0; i < book._book.pdfInfo.numPages; i++){
+				for(var i = 0; i < book._book._pdfInfo.numPages; i++){
 					pages.push(book._readPage(i + 1));
 				}
 
