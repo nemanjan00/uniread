@@ -16,7 +16,7 @@
     "minimist": "^1.2.0",
     "opencollective-postinstall": "^2.0.0",
     "pdfjs-dist": "^2.0.489",
-    "snyk": "^1.82.1",
+    "snyk": "^1.124.1",
     "textversionjs": "^1.1.1",
     "update-notifier": "^2.5.0"
   },
