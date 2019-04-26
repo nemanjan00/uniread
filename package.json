@@ -13,6 +13,7 @@
     "dateformat": "^3.0.3",
     "epub": "https://github.com/nemanjan00/epub.git#67e7822d0be55f9cb0594f23dd034e2358439f63",
     "file-type": "^8.0.0",
+    "html-to-text": "^5.1.1",
     "minimist": "^1.2.0",
     "opencollective-postinstall": "^2.0.0",
     "pdfjs-dist": "^2.0.489",
