@@ -16,6 +16,8 @@ module.exports = (book) => {
 
 		_tick: undefined,
 
+		_chapter: -1,
+
 		_report: () => {
 			return "Speed: " + player._speed + "ms\nProgress: " + player._current + "/" + player._book.text.length + "\nTime left: " + player._niceTime();
 		},
@@ -161,6 +163,18 @@ module.exports = (book) => {
 			player._screen.debug(next);
 
 			player._tick = setTimeout(() => {
+				let currentChapter = -1;
+
+				player._book.links.some((link, key) => {
+					currentChapter = key - 1;
+
+					return link.word > player._current + 1;
+				});
+
+				if(currentChapter !== player._chapter){
+					player._chapterList.select(currentChapter);
+				}
+
 				player._draw();
 
 				player._current++;
