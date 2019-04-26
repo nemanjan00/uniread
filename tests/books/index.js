@@ -86,23 +86,19 @@ describe("Book engines", function() {
 	});
 
 	describe("Auto detected engine testing", function() {
-		it("Detects engine", function() {
-			try {
-				files.forEach((file) => {
-					it("Detects engine for" + file, function(done) {
-						let engine = sources.detectEngine(file);
+		files.forEach((file) => {
+			it("Detects engine for" + file, function(done) {
+				let engine = sources.detectEngine(file);
 
-						expect(engine).to.be.a("promise");
+				expect(engine).to.be.a("promise");
 
-						validateBookFormat(engine, file, done);
-					});
-				});
+				validateBookFormat(engine, file, done);
+			});
+		});
 
-				expect(sources.detectEngine("./index.js")).to.be.rejected;
-				expect(sources.detectEngine("./books/Metamorphosis-jackson.mobi")).to.be.rejected;
-			} catch (e) {
-				done(e);
-			}
+		it("Detects engine for invalid formats", function() {
+			expect(sources.detectEngine("./index.js")).to.be.rejected;
+			expect(sources.detectEngine("./books/Metamorphosis-jackson.mobi")).to.be.rejected;
 		});
 	});
 });
