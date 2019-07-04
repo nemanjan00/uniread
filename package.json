@@ -17,7 +17,7 @@
     "minimist": "^1.2.0",
     "opencollective-postinstall": "^2.0.0",
     "pdfjs-dist": "^2.0.489",
-    "snyk": "^1.82.1",
+    "snyk": "^1.189.0",
     "textversionjs": "^1.1.1",
     "update-notifier": "^2.5.0"
   },
@@ -30,7 +30,8 @@
     "snyk-protect": "snyk protect",
     "prepare": "yarn snyk-protect",
     "depUpdate": "./devScripts/update.sh",
-    "postinstall": "opencollective-postinstall"
+    "postinstall": "opencollective-postinstall",
+    "prepublish": "npm run snyk-protect"
   },
   "bin": {
     "uniread": "./bin/uniread.js"
