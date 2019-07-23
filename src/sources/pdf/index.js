@@ -11,7 +11,7 @@ module.exports = (filename) => {
 			return new Promise((resolve) => {
 				fs.readFile(filename, function (err, data) {
 					var data_array = new Uint8Array(data);
-					pdfJs.getDocument(data_array).then(function (pdf) {
+					pdfJs.getDocument(data_array).promise.then(function (pdf) {
 						book._book = pdf;
 
 						resolve(book);

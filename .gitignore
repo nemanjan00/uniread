@@ -16,3 +16,7 @@
 
 /.nyc_output
 
+# VScode
+
+/.vscode
+
