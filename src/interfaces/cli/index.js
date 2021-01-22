@@ -19,7 +19,7 @@ module.exports = (book) => {
 		_chapter: -1,
 
 		_report: () => {
-			return "Speed: " + player._speed + "ms\nProgress: " + player._current + "/" + player._book.text.length + "\nTime left: " + player._niceTime();
+			return "Speed: " + player._speed + "ms / " + (Math.round(60 * 1000 / player._speed)) + " WPM\nProgress: " + player._current + "/" + player._book.text.length + "\nTime left: " + player._niceTime();
 		},
 
 		_niceTime: () => {
