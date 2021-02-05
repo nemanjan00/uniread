@@ -17,7 +17,7 @@
     "minimist": "^1.2.0",
     "opencollective-postinstall": "^2.0.0",
     "pdfjs-dist": "^2.0.489",
-    "snyk": "^1.189.0",
+    "snyk": "^1.258.2",
     "textversionjs": "^1.1.1",
     "update-notifier": "^2.5.0"
   },
@@ -28,7 +28,7 @@
     "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
     "watch-cli": "nodemon -I ./bin/uniread.js",
     "snyk-protect": "snyk protect",
-    "prepare": "yarn snyk-protect",
+    "prepare": "yarn run snyk-protect && yarn snyk-protect",
     "depUpdate": "./devScripts/update.sh",
     "postinstall": "opencollective-postinstall",
     "prepublish": "npm run snyk-protect"
