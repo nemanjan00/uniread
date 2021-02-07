@@ -46,13 +46,14 @@ module.exports = {
 		});
 	},
 	transformChapters: (chapters) => {
+        const _text = [];
 		const text = [];
 		const links = [];
 
 		chapters.forEach((chapter) => {
 			links.push({
 				name: chapter.title,
-				word: text.length
+				word: _text.length
 			});
 
 			chapter.content = chapter.content
@@ -63,8 +64,13 @@ module.exports = {
 			chapter.content = chapter.content.split(" ");
 
 			chapter.content.forEach((word) => {
-				text.push(word);
+				_text.push(word);
 			});
+
+            for (let counter = 0; counter < _text.length; counter += 5){
+                text.push(_text.slice(counter, counter + 5).join(" "));
+            };
+
 		});
 
 		let book = {
