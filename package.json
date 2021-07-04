@@ -16,7 +16,7 @@
     "html-to-text": "^5.1.1",
     "minimist": "^1.2.0",
     "opencollective-postinstall": "^2.0.0",
-    "pdfjs-dist": "^2.0.489",
+    "pdfjs-dist": "^2.8.335",
     "snyk": "^1.189.0",
     "textversionjs": "^1.1.1",
     "update-notifier": "^2.5.0"

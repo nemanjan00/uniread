@@ -1,4 +1,4 @@
-const pdfJs = require("pdfjs-dist");
+const pdfJs = require("pdfjs-dist/legacy/build/pdf.js");
 pdfJs.disableWorker = true;
 
 const fs = require("fs");
