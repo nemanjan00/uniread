@@ -9,7 +9,7 @@
   "private": false,
   "dependencies": {
     "blessed": "^0.1.81",
-    "blessed-contrib": "^4.8.17",
+    "blessed-contrib": "^4.9.0",
     "dateformat": "^3.0.3",
     "epub": "https://github.com/nemanjan00/epub.git#67e7822d0be55f9cb0594f23dd034e2358439f63",
     "file-type": "^8.0.0",
