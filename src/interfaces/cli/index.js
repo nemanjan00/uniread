@@ -2,11 +2,14 @@ const dateformat = require("dateformat");
 
 const blessed = require("blessed");
 const contrib = require("blessed-contrib");
+const path = require("path");
+const fs = require("fs");
 
-module.exports = (book) => {
+module.exports = (book, filename) => {
 	const player = {
 		_speed: 250,
 		_book: undefined,
+		_filename: undefined,
 		_current: 0,
 
 		_screen: undefined,
@@ -74,7 +77,7 @@ module.exports = (book) => {
 				mouse: true
 			});
 
-			let help = grid.set(11, 0, 1, 12, blessed.text, {
+			let help = grid.set(11, 0, 1, 9, blessed.text, {
 				style: {
 					selected: {
 						bg: "red"
@@ -84,6 +87,63 @@ module.exports = (book) => {
 			});
 
 			help.append(blessed.text({label: "space pause | j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward | q escape "}));
+			let wordIndexForm = grid.set(11, 9, 1, 3, blessed.form, {
+				label: "Skip to Word - s or click below",
+				keys: true,
+				mouse: true,
+				border: "line"
+			});
+
+			let wordIndexInput = blessed.textbox({
+				parent: wordIndexForm,
+				name: "wordIndex",
+				inputOnFocus: true,
+				showCursor: true,
+				width: 11,
+				height: 1,
+				left: 0,
+				top: 0,
+				keys: true
+			});
+
+			// When user presses Enter inside the textbox
+			wordIndexInput.on("submit", (value) => {
+				let target = parseInt(value, 10);
+				if (!isNaN(target) && target >= 0 && target < player._book.text.length) {
+					player._current = target;
+					let currentChapter = -1;
+					player._book.links.some((link, key) => {//This sets the chapter.
+						currentChapter = key - 1;			//Otherwise, if you skip to a part halfway througha chapter,
+						//tickFunction will set current back to the start of the chapter
+						return link.word > player._current + 1;
+					});
+					player._chapterList.select(currentChapter);
+					player._chapter = currentChapter;
+					player._current = target;//Have to set current to target again, as select.chapter sets current to the start of the chapter
+
+					player._draw();
+				}
+				// Clear input for next time
+				wordIndexInput.clearValue();
+				player._screen.render();
+			});
+
+			// Submit on Enter key
+			player._screen.key("enter", function() {
+				if (wordIndexInput.focused) {
+					wordIndexInput.submit();
+				}
+			});
+			wordIndexInput.on("click", () => {
+			//	wordIndexInput.focus(); For some reason this causes double typing
+				player._screen.render();
+			});
+
+			player._screen.key(["s"], function() {
+				wordIndexInput.focus();
+				player._screen.render();
+			});
+			player._screen.render();
 
 			player._text = blessed.text({
 				label: "Book"
@@ -91,7 +151,35 @@ module.exports = (book) => {
 
 			player._textBox.append(player._text);
 
+			const uniFilename = path.join(
+				path.dirname(filename),
+				"." + path.basename(filename) + ".uni"
+			);
+			if (fs.existsSync(uniFilename)) {
+				let data = JSON.parse(fs.readFileSync(uniFilename, "utf8"));
+				if (data.speed) player._speed = data.speed;
+				if (data.current) player._current = data.current;
+				let currentChapter = -1;
+				player._book.links.some((link, key) => {//This sets the chapter.
+					currentChapter = key - 1;			//Otherwise, if you skip to a part halfway througha chapter,
+					//tickFunction will set current back to the start of the chapter
+					return link.word > player._current + 1;
+				});
+				player._chapterList.select(currentChapter);
+				player._chapter = currentChapter;
+				if (data.current) player._current = data.current;
+
+			}
 			player._screen.key(["escape", "q", "C-c"], function() {
+				// Write JSON data
+				fs.writeFileSync(
+					uniFilename,
+					JSON.stringify({
+						current: player._current,
+						speed: player._speed
+					}),
+					"utf8"
+				);
 				return process.exit(0);
 			});
 
@@ -141,6 +229,8 @@ module.exports = (book) => {
 				player._draw();
 			});
 
+			
+
 			player._screen.render();
 
 			player._chapterList.on("select item", (element, key) => {
@@ -167,11 +257,11 @@ module.exports = (book) => {
 
 				player._book.links.some((link, key) => {
 					currentChapter = key - 1;
-
 					return link.word > player._current + 1;
-				});
-
+				}); //This returns the word of the current chapter
+				
 				if(currentChapter !== player._chapter){
+					player._chapter = currentChapter;
 					player._chapterList.select(currentChapter);
 				}
 
