@@ -1,7 +1,10 @@
 const dateformat = require("dateformat");
 
 const blessed = require("blessed");
-const contrib = require("blessed-contrib");
+
+// Only the grid, never the package index: that pulls in the markdown widget
+// and with it marked-terminal, which fails to parse on older node
+const Grid = require("blessed-contrib/lib/layout/grid");
 
 const picker = require("./picker");
 
@@ -60,7 +63,7 @@ module.exports = (book, options) => {
 		_init: (book) => {
 			player._screen = blessed.screen({debug: true});
 
-			var grid = new contrib.grid({rows: 12, cols: 12, screen: player._screen});
+			var grid = new Grid({rows: 12, cols: 12, screen: player._screen});
 
 			player._textBox = grid.set(0, 6, 2, 6, blessed.box, {
 				label: "Book"
