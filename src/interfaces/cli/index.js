@@ -13,7 +13,9 @@ const picker = require("./picker");
 const SAVE_EVERY = 50;
 
 // `options` is optional: {file, library, open} enables resume and the recent
-// book picker, and `open` is what loads another book (file => Promise<book>)
+// book picker, `open` is what loads another book (file => Promise<book>), and
+// `input` is where key presses come from when stdin is busy carrying the book
+// itself
 module.exports = (book, options) => {
 	options = options || {};
 
@@ -61,7 +63,7 @@ module.exports = (book, options) => {
 		},
 
 		_init: (book) => {
-			player._screen = blessed.screen({debug: true});
+			player._screen = blessed.screen(options.input ? {debug: true, input: options.input} : {debug: true});
 
 			var grid = new Grid({rows: 12, cols: 12, screen: player._screen});
 

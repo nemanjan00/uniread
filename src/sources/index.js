@@ -13,6 +13,8 @@ const engines = {
 	text: require("./text")
 };
 
+const stream = require("./stream");
+
 // `file-type` works on magic bytes, which plain text formats do not have
 const extensions = {
 	".azw": engines.mobi,
@@ -63,6 +65,7 @@ module.exports = {
 	engines: engines,
 	extensions: extensions,
 	looksLikeText: looksLikeText,
+	stream: stream,
 	_detectEngine: (filename) => {
 		return fs.promises.readFile(filename).then((data) => {
 			return fileType.fromBuffer(data).then((type) => {

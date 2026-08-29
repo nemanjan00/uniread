@@ -10,8 +10,11 @@ const uniread = require("../");
 const cli = uniread.interfaces.cli;
 const recent = uniread.interfaces.recent;
 const spritz = uniread.methods.spritz;
+const stream = uniread.sources.stream;
 
 const library = uniread.library.open();
+
+const args = process.argv.slice(2).filter((argument) => !argument.startsWith("-"));
 
 const open = (file) => {
 	return spritz.getBook(file);
@@ -30,9 +33,38 @@ const read = (file) => {
 	});
 };
 
+// Text piped in has taken over stdin, so the reader has to get its key presses
+// straight from the terminal
+const readStdin = () => {
+	return stream(process.stdin, "Piped text").then((book) => {
+		return spritz.transformBook(book);
+	}).then((book) => {
+		let input;
+
+		try {
+			input = fs.createReadStream("/dev/tty");
+		} catch {
+			// Without a terminal the reader still shows, it just cannot be
+			// driven
+		}
+
+		cli(book, {
+			open: open,
+			input: input
+		});
+	}).catch(() => {
+		console.log("Could not read the piped text");
+		process.exit(1);
+	});
+};
+
 const run = () => {
-	// No book given: pick up whatever was read last
-	if(process.argv.length < 3){
+	if(args.length === 0){
+		if(!process.stdin.isTTY){
+			return readStdin();
+		}
+
+		// No book given: pick up whatever was read last
 		return recent(library).then((file) => {
 			if(file === undefined){
 				console.log("No recent books. Run: uniread <book>");
@@ -43,7 +75,7 @@ const run = () => {
 		});
 	}
 
-	const file = process.argv[process.argv.length - 1];
+	const file = args[args.length - 1];
 
 	if(!fs.existsSync(file)){
 		console.log("File does not exist");

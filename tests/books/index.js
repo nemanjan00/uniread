@@ -393,6 +393,31 @@ describe("Book engines", function() {
 		});
 	});
 
+	describe("Piped text", function() {
+		const Readable = require("stream").Readable;
+
+		it("Reads a book from a stream", function() {
+			return sources.stream(Readable.from(["alpha beta ", "gamma"]), "Piped text").then((book) => {
+				expect(book.getTitle()).to.equal("Piped text");
+
+				return book.getChapters();
+			}).then((chapters) => {
+				expect(chapters).to.have.lengthOf(1);
+				expect(chapters[0].content).to.equal("alpha beta gamma");
+			});
+		});
+
+		it("Rejects when the stream fails", function() {
+			const broken = new Readable({
+				read() {
+					this.destroy(new Error("pipe broke"));
+				}
+			});
+
+			return expect(sources.stream(broken, "Piped text")).to.be.rejectedWith("pipe broke");
+		});
+	});
+
 	describe("Auto detection book engine", function() {
 		it("Detects engine", function() {
 			return Promise.all([

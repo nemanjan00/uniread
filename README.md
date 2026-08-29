@@ -73,6 +73,13 @@ Run it without a book to pick one from your recently read books:
 uniread
 ```
 
+Text can be piped in, which is handy for reading a web page through a tool that
+extracts its text:
+
+```bash
+get-current-page-text | uniread
+```
+
 ### Controls
 
 | Key | Action |
