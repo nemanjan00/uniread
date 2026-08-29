@@ -1,0 +1,102 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Commands
+
+The project uses yarn, but npm works equally well — both lockfiles are kept in sync.
+
+```bash
+yarn                       # install
+yarn get-books             # download sample books into ./books (tests need these)
+yarn lint                  # eslint, check only
+yarn lint-fix              # eslint --fix
+yarn test                  # full mocha suite
+yarn coverage              # nyc + mocha
+yarn watch-cli             # nodemon on bin/uniread.js
+```
+
+Running a subset of tests — `tests/index.js` is the only entry point mocha is
+pointed at, and it `require`s each suite, so target tests by name rather than by
+file:
+
+```bash
+npx mocha --timeout 60000 tests/index.js --grep "Library"
+npx mocha --timeout 60000 tests/index.js --grep "Resumes where the book"
+```
+
+The first suite (`tests/devTools`) shells out to `devScripts/getBooks.sh`, which
+downloads sample books over the network; the ePub and pdf suites read those
+files from `./books`. The long timeout exists for that download.
+
+## Architecture
+
+A Spritz-style speed reader: a book is flattened into one flat array of words,
+and the terminal UI flashes them one at a time.
+
+`index.js` → `src/index.js` exposes four namespaces, which is also the pipeline:
+
+```
+sources  →  methods/spritz  →  interfaces/cli
+                                     ↕
+                                  library
+```
+
+**`src/sources/`** — one directory per format, each exporting
+`(filename) => Promise<book>`. Every engine must satisfy the same contract:
+
+- `getTitle() => string`
+- `getChapters() => Promise<[{id, title, content}]>` where `content` is text
+
+`src/sources/index.js` sniffs the format with `file-type` (async — it returns a
+promise) and falls back to a `.txt` extension check, since plaintext has no
+magic bytes. `detectEngine` must always reject rather than throw, including for
+unreadable files. Adding a format means adding a directory and registering it in
+the `engines` map; the layers above need no changes.
+
+Only the ePub source produces real chapters — pdf and text return a single
+chapter with a placeholder title.
+
+**`src/methods/spritz/`** — `transformChapters` is the core transform: it
+concatenates every chapter's words into `book.text` and records `book.links` as
+`{name, word}`, where `word` is the index in `text` where that chapter starts.
+Everything downstream — chapter navigation, progress, resume — is an index into
+that single array, so nothing above this layer knows about chapters as such.
+
+**`src/interfaces/cli/`** — a blessed/blessed-contrib TUI built around a
+`player` object of underscore-prefixed internals. Playback is a self-rescheduling
+`setTimeout` (`_tickFunction`), not an interval; the delay doubles on words
+containing `,.?!;`. Two blessed details matter when editing it:
+
+- `list.select()` emits `select item`, so the tick's chapter auto-follow goes
+  through `_follow()`, which sets `_following` to make the handler ignore it.
+  Without that guard, playback snaps back to the chapter start.
+- The picker sets `screen.grabKeys` so the reader's global key bindings do not
+  fire while the overlay is up.
+
+`cli(book, options)` — `options` is optional, and `{file, library, open}` is what
+enables resume and the recent-book picker. Without it the reader still works,
+just without persistence.
+
+**`src/library/`** — `create(storePath)` returns the progress store; books are
+keyed by absolute path. Reads are defensive by design: a missing, corrupt, or
+non-array library file yields `[]` rather than an error, because losing progress
+must never stop the reader. `position()` restarts a book whose saved index no
+longer fits it.
+
+**`bin/uniread.js`** — wires the pipeline together and decides between reading an
+argument and opening the recent-books picker. `update-notifier` checks versions
+in a background process, so nothing here should block startup on it.
+
+## Constraints
+
+- **CommonJS only.** Several dependencies (chai, dateformat, file-type,
+  pdfjs-dist, update-notifier) are deliberately held below their latest majors
+  because those releases are ESM-only. Do not bump them without converting the
+  whole package to ESM.
+- **pdf.js is lazy-loaded** inside `src/sources/pdf/`, and `getDocument` passes
+  `isEvalSupported: false` — the mitigation for CVE-2024-4367 on pdfjs-dist 3.x.
+  Keep both.
+- **Tabs, double quotes, semicolons, unix line endings** — enforced by
+  `eslint.config.js` (flat config) and `.editorconfig`. A husky pre-commit hook
+  runs lint and tests.
