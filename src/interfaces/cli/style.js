@@ -35,6 +35,24 @@ const COLOURS = {
 const ENDS_SENTENCE = /[.?!]/;
 const EXCLAIMS = /!/;
 
+// A word counts as a repeat if it turned up in the last few words or earlier
+// in the same sentence. Repetition blindness makes the second one easy to miss
+const REPEAT_WINDOW = 10;
+const REPEAT_COLOUR = "#8787ff";
+
+// Function words repeat constantly and carry no meaning to miss
+const COMMON = [
+	"the", "and", "but", "for", "nor", "yet", "was", "were", "are", "his",
+	"her", "its", "their", "our", "your", "that", "this", "with", "from",
+	"had", "has", "have", "not", "you", "she", "him", "they", "them", "who",
+	"what", "when", "then", "than", "there", "here", "been", "into", "out",
+	"all", "any", "one", "two", "own", "off", "own", "how", "why", "did"
+].reduce((set, word) => {
+	set[word] = true;
+
+	return set;
+}, {});
+
 // Straight and typographic quotes. An apostrophe is left out on purpose, or
 // every contraction would open a quotation
 const OPENS_QUOTE = /["“«]/;
@@ -48,12 +66,22 @@ const colourOf = (word) => {
 	return COLOURS[bare(word)];
 };
 
+const isRepeat = (word, recent, sentence) => {
+	if(word.length < 3 || COMMON[word]){
+		return false;
+	}
+
+	return recent.indexOf(word) !== -1 || sentence.indexOf(word) !== -1;
+};
+
 // One style per word, worked out in a single pass over the book
 const styles = (words) => {
 	const result = words.map(() => ({}));
 
 	let quoted = false;
 	let sentence = [];
+	let said = [];
+	let recent = [];
 
 	words.forEach((word, key) => {
 		const opens = OPENS_QUOTE.test(word);
@@ -75,6 +103,22 @@ const styles = (words) => {
 			result[key].colour = colour;
 		}
 
+		const plain = bare(word);
+
+		if(isRepeat(plain, recent, said)){
+			result[key].repeated = true;
+		}
+
+		if(plain !== ""){
+			said.push(plain);
+
+			recent.push(plain);
+
+			if(recent.length > REPEAT_WINDOW){
+				recent.shift();
+			}
+		}
+
 		sentence.push(key);
 
 		if(ENDS_SENTENCE.test(word)){
@@ -85,6 +129,7 @@ const styles = (words) => {
 			}
 
 			sentence = [];
+			said = [];
 		}
 	});
 
@@ -101,9 +146,13 @@ const decorate = (word, style) => {
 	let open = "";
 	let close = "";
 
-	if(style.colour){
-		open += "{" + style.colour + "-fg}";
-		close = "{/" + style.colour + "-fg}" + close;
+	// What the word says comes first; a repeat is only marked when the word
+	// has no colour of its own
+	const colour = style.colour || (style.repeated ? REPEAT_COLOUR : undefined);
+
+	if(colour){
+		open += "{" + colour + "-fg}";
+		close = "{/" + colour + "-fg}" + close;
 	}
 
 	if(style.emphatic){
@@ -121,6 +170,8 @@ const decorate = (word, style) => {
 
 module.exports = {
 	COLOURS: COLOURS,
+	REPEAT_COLOUR: REPEAT_COLOUR,
+	REPEAT_WINDOW: REPEAT_WINDOW,
 	styles: styles,
 	decorate: decorate
 };

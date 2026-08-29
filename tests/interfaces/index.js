@@ -116,6 +116,46 @@ describe("Reader styling", function() {
 		});
 	});
 
+	describe("Repeated words", function() {
+		const repeats = (sentence) => {
+			const words = sentence.split(" ");
+
+			return style.styles(words)
+				.map((each, key) => (each.repeated ? words[key] : undefined))
+				.filter((word) => word !== undefined);
+		};
+
+		it("Marks a word said again in the same sentence", function() {
+			expect(repeats("the cat sat by the other cat")).to.deep.equal(["cat"]);
+		});
+
+		it("Marks a word said again a few words later", function() {
+			expect(repeats("a dog barked. the dog left.")).to.deep.equal(["dog"]);
+		});
+
+		it("Forgets a word said long ago, in another sentence", function() {
+			const far = "dog ran fast. alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu. dog barks.";
+
+			expect(repeats(far)).to.deep.equal([]);
+		});
+
+		it("Ignores the words that always repeat", function() {
+			expect(repeats("the man and the dog and the cat")).to.deep.equal([]);
+		});
+
+		it("Ignores very short words", function() {
+			expect(repeats("it is it is")).to.deep.equal([]);
+		});
+
+		it("Gives a repeat its own colour, unless the word names one", function() {
+			expect(style.decorate("dog", {repeated: true}))
+				.to.equal("{" + style.REPEAT_COLOUR + "-fg}dog{/" + style.REPEAT_COLOUR + "-fg}");
+
+			expect(style.decorate("red", {repeated: true, colour: "red"}))
+				.to.equal("{red-fg}red{/red-fg}");
+		});
+	});
+
 	describe("Turning it into markup", function() {
 		it("Wraps a word in blessed tags", function() {
 			expect(style.decorate("blue", {colour: "blue"})).to.equal("{blue-fg}blue{/blue-fg}");

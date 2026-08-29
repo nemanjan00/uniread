@@ -110,6 +110,10 @@ Uniread reads a little meaning out of each word and shows it: a word that names
 a colour appears in that colour, a quotation is underlined, and a sentence
 ending in an exclamation mark is emboldened. Press `s` for plain words instead.
 
+A word that has already been said, in the same sentence or in the last ten
+words, is coloured too, so repetition blindness does not carry you past it. The
+words that always repeat, the and and and so on, are left alone.
+
 Underline stands in for italic, which terminals do not reliably offer, and a
 colour outside the sixteen a terminal knows is shown as the nearest shade it
 has.
