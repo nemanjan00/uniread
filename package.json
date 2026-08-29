@@ -14,6 +14,7 @@
     "epub": "https://github.com/nemanjan00/epub.git#67e7822d0be55f9cb0594f23dd034e2358439f63",
     "file-type": "^16.5.4",
     "html-to-text": "^9.0.5",
+    "marked": "^15.0.12",
     "opencollective-postinstall": "^2.0.0",
     "pdfjs-dist": "^3.11.174",
     "textversionjs": "^1.1.3",

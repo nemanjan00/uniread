@@ -1,14 +1,29 @@
 const fileType = require("file-type");
 const fs = require("fs");
+const path = require("path");
 
 const engines = {
 	epub: require("./epub"),
+	html: require("./html"),
+	markdown: require("./markdown"),
 	pdf: require("./pdf"),
 	text: require("./text")
 };
 
+// `file-type` works on magic bytes, which plain text formats do not have
+const extensions = {
+	".htm": engines.html,
+	".html": engines.html,
+	".markdown": engines.markdown,
+	".md": engines.markdown,
+	".text": engines.text,
+	".txt": engines.text,
+	".xhtml": engines.html
+};
+
 module.exports = {
 	engines: engines,
+	extensions: extensions,
 	_detectEngine: (filename) => {
 		return fs.promises.readFile(filename).then((data) => {
 			return fileType.fromBuffer(data);
@@ -17,9 +32,10 @@ module.exports = {
 				return engines[type.ext];
 			}
 
-			// `file-type` does not detect plaintext files
-			if(filename.endsWith(".txt")) {
-				return engines.text;
+			const extension = extensions[path.extname(filename).toLowerCase()];
+
+			if(extension !== undefined){
+				return extension;
 			}
 
 			return false;

@@ -1,5 +1,6 @@
 const EPub = require("epub");
-const htmlToText = require("html-to-text");
+
+const markup = require("../markup");
 
 module.exports = (filename) => {
 	let book = {
@@ -49,12 +50,7 @@ module.exports = (filename) => {
 
 			return Promise.all(chaptersContent).then((contents) => {
 				contents.forEach((content, key) => {
-					chapters[key].content = htmlToText.convert(content, {
-						selectors: [
-							{selector: "a", options: {ignoreHref: true}},
-							{selector: "img", format: "skip"}
-						]
-					});
+					chapters[key].content = markup.toText(content);
 				});
 
 				return chapters;

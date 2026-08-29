@@ -39,6 +39,12 @@ We try to support as much as possible of ebook formats. If you have any kind of 
 * epub (thanks to [julien-c/epub](https://github.com/julien-c/epub) library)
 * text (thanks to [pzmarzly](https://github.com/pzmarzly) and PR [#25](https://github.com/nemanjan00/uniread/pull/25))
 * pdf (thanks to [Mozilla pdf.js](https://github.com/mozilla/pdf.js) library)
+* markdown, `.md` / `.markdown` (thanks to [marked](https://github.com/markedjs/marked) library)
+* html, `.html` / `.htm` / `.xhtml`
+
+Where a format says how it is divided up, uniread follows it: epub uses its
+spine, pdf its bookmarks, and markdown and html their top two heading levels.
+Everything else is read as a single chapter.
 
 ## Installation / update
 
