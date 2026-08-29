@@ -29,24 +29,59 @@ const extensions = {
 	".xhtml": engines.html
 };
 
+// Enough of the file to tell text from binary
+const SAMPLE = 8192;
+
+// Text formats have no magic bytes, so anything unrecognised that reads like
+// text is treated as plain text rather than refused
+const looksLikeText = (data) => {
+	const sample = data.slice(0, SAMPLE);
+
+	if(sample.length === 0){
+		return false;
+	}
+
+	let control = 0;
+
+	for(let i = 0; i < sample.length; i++){
+		const byte = sample[i];
+
+		// A null byte means binary, whatever else the file holds
+		if(byte === 0){
+			return false;
+		}
+
+		if(byte < 32 && byte !== 9 && byte !== 10 && byte !== 13){
+			control += 1;
+		}
+	}
+
+	return control / sample.length < 0.05;
+};
+
 module.exports = {
 	engines: engines,
 	extensions: extensions,
+	looksLikeText: looksLikeText,
 	_detectEngine: (filename) => {
 		return fs.promises.readFile(filename).then((data) => {
-			return fileType.fromBuffer(data);
-		}).then((type) => {
-			if(type && engines[type.ext] !== undefined){
-				return engines[type.ext];
-			}
+			return fileType.fromBuffer(data).then((type) => {
+				if(type && engines[type.ext] !== undefined){
+					return engines[type.ext];
+				}
 
-			const extension = extensions[path.extname(filename).toLowerCase()];
+				const extension = extensions[path.extname(filename).toLowerCase()];
 
-			if(extension !== undefined){
-				return extension;
-			}
+				if(extension !== undefined){
+					return extension;
+				}
 
-			return false;
+				if(looksLikeText(data)){
+					return engines.text;
+				}
+
+				return false;
+			});
 		});
 	},
 	detectEngine: (filename) => {

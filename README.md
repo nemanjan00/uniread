@@ -49,6 +49,9 @@ Where a format says how it is divided up, uniread follows it: epub uses its
 spine, pdf its bookmarks, fb2 its sections, and markdown, html, docx and mobi
 their top two heading levels. Everything else is read as a single chapter.
 
+Anything else that reads like text is treated as plain text, so a file with no
+extension or an unfamiliar one still opens.
+
 Mobi books using HUFF/CDIC compression, and any DRM protected book, cannot be
 read.
 

@@ -113,7 +113,7 @@ describe("Uniread book engine", function() {
 
 	describe("getBook", function() {
 		it("Rejects for an unsupported format", function() {
-			return expect(spritz.getBook("./index.js")).to.be.rejected;
+			return expect(spritz.getBook("./screencast/spritz.gif")).to.be.rejected;
 		});
 
 		it("Rejects for a missing file", function() {

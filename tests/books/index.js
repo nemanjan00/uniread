@@ -398,17 +398,33 @@ describe("Book engines", function() {
 			return Promise.all([
 				expect(sources._detectEngine("./books/Metamorphosis-jackson.pdf")).to.eventually.equal(sources.engines.pdf),
 				expect(sources._detectEngine("./books/Metamorphosis-jackson.epub")).to.eventually.equal(sources.engines.epub),
-				expect(sources._detectEngine("./index.js")).to.eventually.equal(false),
-				expect(sources._detectEngine("./books/Metamorphosis-jackson.mobi")).to.eventually.equal(sources.engines.mobi)
+				expect(sources._detectEngine("./books/Metamorphosis-jackson.mobi")).to.eventually.equal(sources.engines.mobi),
+				expect(sources._detectEngine("./screencast/spritz.gif")).to.eventually.equal(false)
 			]);
 		});
 
 		it("Detects text formats by extension", function() {
 			return Promise.all([
 				expect(sources._detectEngine("./README.md")).to.eventually.equal(sources.engines.markdown),
-				expect(sources._detectEngine("./package.json")).to.eventually.equal(false),
 				expect(sources._detectEngine("./notes.txt")).to.be.rejected
 			]);
+		});
+
+		it("Reads anything else that looks like text as plain text", function() {
+			return Promise.all([
+				expect(sources._detectEngine("./index.js")).to.eventually.equal(sources.engines.text),
+				expect(sources._detectEngine("./package.json")).to.eventually.equal(sources.engines.text)
+			]);
+		});
+
+		it("Tells text from binary", function() {
+			expect(sources.looksLikeText(Buffer.from("plain words\nand more\n"))).to.equal(true);
+			expect(sources.looksLikeText(Buffer.from("tab\tseparated\r\nlines"))).to.equal(true);
+			expect(sources.looksLikeText(Buffer.from([0x68, 0x69, 0x00, 0x68]))).to.equal(false);
+			expect(sources.looksLikeText(Buffer.from([0x01, 0x02, 0x03, 0x04, 0x05]))).to.equal(false);
+
+			// Nothing to read is not a book
+			expect(sources.looksLikeText(Buffer.alloc(0))).to.equal(false);
 		});
 
 		it("Matches extensions regardless of case", function() {
@@ -433,7 +449,7 @@ describe("Book engines", function() {
 		});
 
 		it("Detects engine for invalid formats", function() {
-			return expect(sources.detectEngine("./index.js")).to.be.rejected;
+			return expect(sources.detectEngine("./screencast/spritz.gif")).to.be.rejected;
 		});
 
 		it("Rejects rather than throwing for a missing file", function() {
