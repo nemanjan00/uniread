@@ -3,11 +3,6 @@
 const sources = require("../../sources/");
 const textVersion = require("textversionjs");
 
-String.prototype.replaceAll = function(search, replacement) {
-	var target = this;
-	return target.replace(new RegExp(search, "g"), replacement);
-};
-
 const textVersionConfig = {
 	linkProcess: (_, linkText) => linkText,
 	imgProcess: (_, alt) => alt,
@@ -16,33 +11,25 @@ const textVersionConfig = {
 
 module.exports = {
 	getBook: (file) => {
-		return new Promise((resolve, reject) => {
-			sources.detectEngine(file).then((book) => {
-				module.exports.transformBook(book).then((book) => {
-					resolve(book);
-				});
-			}).catch((error) => {
-				reject(error);
-			});
+		return sources.detectEngine(file).then((book) => {
+			return module.exports.transformBook(book);
 		});
 	},
 	transformBook: (book) => {
-		return new Promise((resolve) => {
-			let title = book.getTitle();
+		let title = book.getTitle();
 
-			book.getChapters().then((chapters) => {
-				chapters = chapters.map((chapter) => {
-					chapter.content = textVersion(chapter.content, textVersionConfig);
+		return book.getChapters().then((chapters) => {
+			chapters = chapters.map((chapter) => {
+				chapter.content = textVersion(chapter.content, textVersionConfig);
 
-					return chapter;
-				});
-
-				chapters = module.exports.transformChapters(chapters);
-
-				chapters.title = title;
-
-				resolve(chapters);
+				return chapter;
 			});
+
+			let book = module.exports.transformChapters(chapters);
+
+			book.title = title;
+
+			return book;
 		});
 	},
 	transformChapters: (chapters) => {
@@ -55,12 +42,7 @@ module.exports = {
 				word: text.length
 			});
 
-			chapter.content = chapter.content
-				.replaceAll("\r\n", "\n")
-				.replaceAll("\t", " ")
-				.replaceAll("\n", " ");
-
-			chapter.content = chapter.content.split(" ");
+			chapter.content = chapter.content.split(/\s+/).filter((word) => word !== "");
 
 			chapter.content.forEach((word) => {
 				text.push(word);

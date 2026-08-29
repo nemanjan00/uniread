@@ -4,10 +4,14 @@ module.exports = (filename) => {
 	const book = {
 		_book: undefined,
 		_init: () => {
-			return new Promise((resolve) => {
+			return new Promise((resolve, reject) => {
 				fs.readFile(filename, function (err, data) {
-					let text = data.toString();
-					book._book = text;
+					if(err){
+						return reject(err);
+					}
+
+					book._book = data.toString();
+
 					resolve(book);
 				});
 			});

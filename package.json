@@ -9,50 +9,46 @@
   "private": false,
   "dependencies": {
     "blessed": "^0.1.81",
-    "blessed-contrib": "^4.8.17",
-    "dateformat": "^3.0.3",
+    "blessed-contrib": "^4.11.0",
+    "dateformat": "^4.6.3",
     "epub": "https://github.com/nemanjan00/epub.git#67e7822d0be55f9cb0594f23dd034e2358439f63",
-    "file-type": "^8.0.0",
-    "html-to-text": "^5.1.1",
-    "minimist": "^1.2.0",
+    "file-type": "^16.5.4",
+    "html-to-text": "^9.0.5",
     "opencollective-postinstall": "^2.0.0",
-    "pdfjs-dist": "^2.8.335",
-    "snyk": "^1.189.0",
-    "textversionjs": "^1.1.1",
-    "update-notifier": "^2.5.0"
+    "pdfjs-dist": "^3.11.174",
+    "textversionjs": "^1.1.3",
+    "update-notifier": "^5.1.0"
   },
   "scripts": {
     "get-books": "./devScripts/getBooks.sh",
-    "lint": "./node_modules/.bin/eslint . --fix",
-    "test": "./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
-    "coverage": "./node_modules/.bin/nyc ./node_modules/.bin/mocha --reporter spec --timeout 60000 tests/index.js",
+    "lint": "eslint .",
+    "test": "mocha --reporter spec --timeout 60000 tests/index.js",
+    "coverage": "nyc mocha --reporter spec --timeout 60000 tests/index.js",
     "watch-cli": "nodemon -I ./bin/uniread.js",
-    "snyk-protect": "snyk protect",
-    "prepare": "yarn snyk-protect",
+    "lint-fix": "eslint . --fix",
     "depUpdate": "./devScripts/update.sh",
     "postinstall": "opencollective-postinstall",
-    "prepublish": "npm run snyk-protect"
+    "prepare": "husky"
   },
   "bin": {
     "uniread": "./bin/uniread.js"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "chai-as-promised": "^7.1.1",
-    "eslint": "^4.19.1",
-    "husky": "^3.0.1",
-    "mocha": "^5.2.0",
-    "nodemon": "^1.18.3",
-    "nyc": "^12.0.2"
+    "@eslint/js": "^10.0.1",
+    "chai": "^4.5.0",
+    "chai-as-promised": "^7.1.2",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
+    "husky": "^9.1.7",
+    "mocha": "^11.8.0",
+    "nodemon": "^3.1.14",
+    "nyc": "^18.0.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "eslint . ; yarn test"
-    }
-  },
-  "snyk": true,
   "collective": {
     "type": "opencollective",
     "url": "https://opencollective.com/uniread"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

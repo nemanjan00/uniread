@@ -6,19 +6,25 @@ module.exports = (filename) => {
 		_epub: undefined,
 
 		_init: (filename) => {
-			return new Promise((resolve) => {
+			return new Promise((resolve, reject) => {
 				book._epub = new EPub(filename);
 
 				book._epub.on("end", function(){
 					resolve(book);
 				});
 
+				book._epub.on("error", reject);
+
 				book._epub.parse();
 			});
 		},
 		_getChapter: (id) => {
-			return new Promise((resolve) => {
+			return new Promise((resolve, reject) => {
 				book._epub.getChapter(id, (error, content) => {
+					if(error){
+						return reject(error);
+					}
+
 					resolve(content);
 				});
 			});
@@ -28,31 +34,30 @@ module.exports = (filename) => {
 			return book._epub.metadata.title;
 		},
 		getChapters: () => {
-			return new Promise((resolve) => {
-				let chaptersContent = [];
+			let chaptersContent = [];
 
-				let chapters = book._epub.flow.map(function(chapter){
-					let chapterResult = {
-						id: chapter.id,
-						title: chapter.title
-					};
+			let chapters = book._epub.flow.map(function(chapter){
+				let chapterResult = {
+					id: chapter.id,
+					title: chapter.title
+				};
 
-					chaptersContent.push(book._getChapter(chapter.id));
+				chaptersContent.push(book._getChapter(chapter.id));
 
-					return chapterResult;
-				});
+				return chapterResult;
+			});
 
-				Promise.all(chaptersContent).then((content) => {
-					content.forEach((content, key) => {
-						chapters[key].content = htmlToText.fromString(content, {
-							ignoreHref: true,
-							ignoreImage: true
-
-						});
+			return Promise.all(chaptersContent).then((contents) => {
+				contents.forEach((content, key) => {
+					chapters[key].content = htmlToText.convert(content, {
+						selectors: [
+							{selector: "a", options: {ignoreHref: true}},
+							{selector: "img", format: "skip"}
+						]
 					});
-
-					resolve(chapters);
 				});
+
+				return chapters;
 			});
 		}
 	};

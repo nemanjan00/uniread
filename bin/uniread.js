@@ -5,53 +5,63 @@ const pkg = require("../package.json");
 
 const fs = require("fs");
 
-const cli = require("../").interfaces.cli;
-const spritz = require("../").methods.spritz;
+const uniread = require("../");
 
-let timeout = false;
+const cli = uniread.interfaces.cli;
+const recent = uniread.interfaces.recent;
+const spritz = uniread.methods.spritz;
 
-const run = () => {
-	let file = process.argv[process.argv.length - 1];
+const library = uniread.library.open();
 
-	if(!fs.existsSync(file)){
-		console.log("File does not exist");
-		process.exit(1);
-	}
+const open = (file) => {
+	return spritz.getBook(file);
+};
 
-	spritz.getBook(file).then((book) => {
-		cli(book);
+const read = (file) => {
+	open(file).then((book) => {
+		cli(book, {
+			file: file,
+			library: library,
+			open: open
+		});
 	}).catch(() => {
 		console.log("Book format not supported");
 		process.exit(1);
 	});
 };
 
-setTimeout(() => {
-	if(!timeout){
-		timeout = true;
-		run();
-	}
-}, 2000);
-
-const notifier = updateNotifier({
-	pkg: pkg,
-	callback: (error, response) => {
-		if(!timeout){
-			timeout = true;
-			if(error){
-				run();
+const run = () => {
+	// No book given: pick up whatever was read last
+	if(process.argv.length < 3){
+		return recent(library).then((file) => {
+			if(file === undefined){
+				console.log("No recent books. Run: uniread <book>");
+				process.exit(0);
 			}
 
-			if(response.type == "latest"){
-				run();
-			} else {
-				notifier.update = response;
-
-				notifier.notify({defer: false, isGlobal: true});
-
-				setTimeout(run, 2000);
-			}
-		}
+			read(file);
+		});
 	}
-});
 
+	const file = process.argv[process.argv.length - 1];
+
+	if(!fs.existsSync(file)){
+		console.log("File does not exist");
+		process.exit(1);
+	}
+
+	read(file);
+};
+
+// The version check runs in the background, so this only reports what a
+// previous run already found
+const notifier = updateNotifier({pkg: pkg});
+
+notifier.notify({defer: false, isGlobal: true});
+
+if(notifier.update){
+	// Leave the notice on screen before the reader takes over
+	setTimeout(run, 2000);
+} else {
+	run();
+}

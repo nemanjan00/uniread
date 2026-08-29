@@ -1,21 +1,41 @@
-const pdfJs = require("pdfjs-dist/legacy/build/pdf.js");
-pdfJs.disableWorker = true;
-
 const fs = require("fs");
+
+// Loaded on demand: pdf.js is large and warns about optional native canvas
+// polyfills it will never need here, so books in other formats should not pay
+// for it
+let pdfJs;
+
+const load = () => {
+	if(!pdfJs){
+		pdfJs = require("pdfjs-dist/legacy/build/pdf.js");
+		pdfJs.disableWorker = true;
+	}
+
+	return pdfJs;
+};
 
 module.exports = (filename) => {
 	const book = {
 		_book: undefined,
 
 		_init: () => {
-			return new Promise((resolve) => {
+			return new Promise((resolve, reject) => {
 				fs.readFile(filename, function (err, data) {
-					var data_array = new Uint8Array(data);
-					pdfJs.getDocument(data_array).promise.then(function (pdf) {
+					if(err){
+						return reject(err);
+					}
+
+					// `isEvalSupported` is the documented mitigation for
+					// CVE-2024-4367, arbitrary code execution from a crafted
+					// font. Nothing here needs eval to pull text out
+					load().getDocument({
+						data: new Uint8Array(data),
+						isEvalSupported: false
+					}).promise.then(function (pdf) {
 						book._book = pdf;
 
 						resolve(book);
-					});
+					}).catch(reject);
 				});
 			});
 		},
@@ -24,54 +44,33 @@ module.exports = (filename) => {
 			return filename;
 		},
 		getChapters: () => {
-			return new Promise((resolve) => {
-				book._readAllPages().then((content) => {
-					let chapters = [{
-						id: 1,
-						title: "Content not supported in pdf files yet.",
-						content: content.join(" ")
-					}];
-
-					resolve(chapters);
-				});
+			return book._readAllPages().then((content) => {
+				return [{
+					id: 1,
+					title: "Content not supported in pdf files yet.",
+					content: content.join(" ")
+				}];
 			});
 		},
 		_readPage: (id) => {
-			var promise = new Promise(function(resolve){
-				book._book.getPage(id).then(function(page){
-					page.getTextContent().then(function(page){
-						page = page.items;
-
-						page = page.map(function(item){
-							return item.str;
-						});
-
-						page = page.join(" ");
-
-						resolve(page);
-					});
-				});
+			return book._book.getPage(id).then(function(page){
+				return page.getTextContent();
+			}).then(function(content){
+				return content.items.map(function(item){
+					return item.str;
+				}).join(" ");
 			});
-
-			return promise;
 		},
 		_readAllPages: () => {
-			var promise = new Promise(function(resolve){
-				var pages = [];
+			const pages = [];
 
-				for(var i = 0; i < book._book._pdfInfo.numPages; i++){
-					pages.push(book._readPage(i + 1));
-				}
+			for(let i = 0; i < book._book.numPages; i++){
+				pages.push(book._readPage(i + 1));
+			}
 
-				Promise.all(pages).then(function(pages){
-					resolve(pages);
-				});
-			});
-
-			return promise;
+			return Promise.all(pages);
 		}
 	};
 
 	return book._init(filename);
 };
-

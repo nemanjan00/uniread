@@ -1,4 +1,4 @@
 module.exports = {
-	cli: require("./cli")
+	cli: require("./cli"),
+	recent: require("./recent")
 };
-

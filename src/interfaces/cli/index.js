@@ -3,11 +3,30 @@ const dateformat = require("dateformat");
 const blessed = require("blessed");
 const contrib = require("blessed-contrib");
 
-module.exports = (book) => {
+const picker = require("./picker");
+
+// Words between progress writes, so resuming stays accurate without
+// hammering the disk on every tick
+const SAVE_EVERY = 50;
+
+// `options` is optional: {file, library, open} enables resume and the recent
+// book picker, and `open` is what loads another book (file => Promise<book>)
+module.exports = (book, options) => {
+	options = options || {};
+
 	const player = {
 		_speed: 250,
 		_book: undefined,
 		_current: 0,
+
+		_file: options.file,
+		_library: options.library,
+		_open: options.open,
+		_saved: 0,
+
+		// Set while the chapter list is following playback, so its "select
+		// item" event is not mistaken for the reader picking a chapter
+		_following: false,
 
 		_screen: undefined,
 		_text: undefined,
@@ -52,6 +71,8 @@ module.exports = (book) => {
 			let chapters = book.links.map(link => link.name);
 
 			player._book = book;
+			player._current = player._resumeAt(book);
+			player._saved = player._current;
 
 			player._reportBox = grid.set(2, 6, 2, 6, blessed.box, {
 				label: "Info"
@@ -83,7 +104,7 @@ module.exports = (book) => {
 				label: "help",
 			});
 
-			help.append(blessed.text({label: "space pause | j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward | q escape "}));
+			help.append(blessed.text({label: "space pause | j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward | C-k recent books | q escape "}));
 
 			player._text = blessed.text({
 				label: "Book"
@@ -92,7 +113,13 @@ module.exports = (book) => {
 			player._textBox.append(player._text);
 
 			player._screen.key(["escape", "q", "C-c"], function() {
+				player._persist();
+
 				return process.exit(0);
+			});
+
+			player._screen.key(["C-k"], function() {
+				player._pickRecent();
 			});
 
 			player._screen.key(["space"], function() {
@@ -136,7 +163,9 @@ module.exports = (book) => {
 			});
 
 			player._screen.key(["l", "right"], function() {
-				player._current++;
+				if(player._current < player._book.text.length - 1){
+					player._current++;
+				}
 
 				player._draw();
 			});
@@ -144,10 +173,113 @@ module.exports = (book) => {
 			player._screen.render();
 
 			player._chapterList.on("select item", (element, key) => {
+				if(player._following){
+					return;
+				}
+
 				player._current = player._book.links[key].word;
+
+				player._draw();
 			});
 
 			player.togglePlay();
+		},
+
+		// Where this book was left off, if the library knows about it
+		_resumeAt: (book) => {
+			if(!player._library || !player._file){
+				return 0;
+			}
+
+			return player._library.position(player._file, book.text.length);
+		},
+
+		_persist: () => {
+			if(!player._library || !player._file){
+				return;
+			}
+
+			player._saved = player._current;
+
+			try {
+				player._library.save(player._file, {
+					title: player._book.title || player._file,
+					position: player._current,
+					total: player._book.text.length
+				});
+			} catch (error) {
+				// Losing progress must never take the reader down
+				player._screen.debug("Could not save progress: " + error.message);
+			}
+		},
+
+		_pickRecent: () => {
+			if(!player._library || !player._open){
+				return;
+			}
+
+			const playing = player._tick !== undefined;
+
+			if(playing){
+				player.togglePlay();
+			}
+
+			player._persist();
+
+			picker.choose(player._screen, player._library.list()).then((file) => {
+				if(file === undefined || file === player._file){
+					if(playing){
+						player.togglePlay();
+					}
+
+					return;
+				}
+
+				player._loadFile(file);
+			});
+		},
+
+		_loadFile: (file) => {
+			player._text.setLabel("Loading...");
+			player._screen.render();
+
+			player._open(file).then((book) => {
+				player._file = file;
+
+				player._swapBook(book);
+			}).catch((error) => {
+				player._screen.debug("Could not open " + file + ": " + error.message);
+
+				player._text.setLabel("Could not open book");
+				player._screen.render();
+			});
+		},
+
+		_swapBook: (book) => {
+			book.links = book.links.filter((chapter) => chapter.name !== undefined);
+
+			player._book = book;
+			player._current = player._resumeAt(book);
+			player._saved = player._current;
+			player._saved = player._current;
+			player._chapter = -1;
+
+			player._chapterList.setItems(book.links.map((link) => link.name));
+
+			player._draw();
+
+			if(player._tick === undefined){
+				player.togglePlay();
+			}
+		},
+
+		// Moves the chapter list without it looking like a chapter jump
+		_follow: (index) => {
+			player._following = true;
+
+			player._chapterList.select(index);
+
+			player._following = false;
 		},
 
 		_draw: () => {
@@ -157,10 +289,20 @@ module.exports = (book) => {
 			player._screen.render();
 		},
 
-		_tickFunction: () => {
-			let next = player._book.text[player._current - 1] || "";
+		_atEnd: () => {
+			return player._current >= player._book.text.length;
+		},
 
-			player._screen.debug(next);
+		_tickFunction: () => {
+			if(player._atEnd()){
+				player._tick = undefined;
+
+				return;
+			}
+
+			let previous = player._book.text[player._current - 1] || "";
+
+			player._screen.debug(previous);
 
 			player._tick = setTimeout(() => {
 				let currentChapter = -1;
@@ -172,22 +314,26 @@ module.exports = (book) => {
 				});
 
 				if(currentChapter !== player._chapter){
-					player._chapterList.select(currentChapter);
+					player._chapter = currentChapter;
+
+					player._follow(currentChapter);
 				}
 
 				player._draw();
 
 				player._current++;
 
+				if(Math.abs(player._current - player._saved) >= SAVE_EVERY){
+					player._persist();
+				}
+
 				player._tickFunction();
-			}, ((next.indexOf(",") !== -1 
-				|| next.indexOf(".") !== -1 
-				|| next.indexOf("?") !== -1
-				|| next.indexOf("!") !== -1
-				|| next.indexOf(";") !== -1)?2:1) * player._speed);
+			}, (/[,.?!;]/.test(previous)?2:1) * player._speed);
 		},
 
 		_focusText: (text) => {
+			text = text || "";
+
 			let length = Math.ceil((7 - text.length) / 2);
 
 			for(let i = length; i > 0; i--){
@@ -201,7 +347,9 @@ module.exports = (book) => {
 			if(player._tick !== undefined){
 				clearTimeout(player._tick);
 				player._tick = undefined;
-			} else {
+
+				player._persist();
+			} else if(!player._atEnd()){
 				player._tickFunction();
 			}
 		}

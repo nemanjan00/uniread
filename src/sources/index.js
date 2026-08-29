@@ -6,34 +6,32 @@ const engines = {
 	pdf: require("./pdf"),
 	text: require("./text")
 };
-	
 
 module.exports = {
 	engines: engines,
 	_detectEngine: (filename) => {
-		const data = fs.readFileSync(filename);
+		return fs.promises.readFile(filename).then((data) => {
+			return fileType.fromBuffer(data);
+		}).then((type) => {
+			if(type && engines[type.ext] !== undefined){
+				return engines[type.ext];
+			}
 
-		const type = fileType(data);
+			// `file-type` does not detect plaintext files
+			if(filename.endsWith(".txt")) {
+				return engines.text;
+			}
 
-		if(type !== null && engines[type.ext] !== undefined){
-			return engines[type.ext];
-		}
-
-		// `file-type` does not detect plaintext files
-		if(filename.endsWith(".txt")) {
-			return engines.text;
-		}
-
-		return false;
+			return false;
+		});
 	},
 	detectEngine: (filename) => {
-		let engine = module.exports._detectEngine(filename);
+		return module.exports._detectEngine(filename).then((engine) => {
+			if(engine){
+				return engine(filename);
+			}
 
-		if(engine){
-			return engine(filename);
-		}
-
-		return Promise.reject("Engine not found");
+			return Promise.reject(new Error("Engine not found"));
+		});
 	}
 };
-

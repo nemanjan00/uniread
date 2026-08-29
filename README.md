@@ -17,6 +17,8 @@ Uniread is [Spritz](http://spritzinc.com/) like CLI fast reading software.
 * [Supported ebook types](#supported-ebook-types)
 * [Installation / update](#installation--update)
 * [Usage](#usage)
+  * [Controls](#controls)
+  * [Resuming and recent books](#resuming-and-recent-books)
 * [Developers guide](#developers-guide)
   * [Yarn package manager](#yarn-package-manager)
   * [Getting sample books for testing](#getting-sample-books-for-testing)
@@ -49,6 +51,35 @@ sudo npm install -g uniread
 ```bash
 uniread ~/Books/somebook.epub
 ```
+
+Run it without a book to pick one from your recently read books:
+
+```bash
+uniread
+```
+
+### Controls
+
+| Key | Action |
+| --- | --- |
+| `space` | Pause / resume |
+| `j` / `k` (or arrows) | Next / previous chapter |
+| `+` / `-` | Speed up / slow down |
+| `h` / `l` (or arrows) | Rewind / forward one word |
+| `ctrl+k` | Open a recently read book |
+| `q` / `escape` | Quit |
+
+### Resuming and recent books
+
+Uniread remembers where you left off in every book you open. Reopening a book
+picks up from that word, and `ctrl+k` switches to another recent book without
+leaving the reader — each book keeps its own position.
+
+Progress is written while you read, when you pause, and when you quit. The
+library lives at `$XDG_DATA_HOME/uniread/library.json` (by default
+`~/.local/share/uniread/library.json`) and holds the last 50 books. Delete
+that file to forget everything; books that have since been moved or deleted
+are dropped from the list automatically.
 
 ## Developers guide
 
@@ -84,10 +115,17 @@ Coding style of this project is defined inside `.editorconfig` and to use it, do
 
 #### Linting
 
-For linting, we are using eslinter and to run it, you can just use:
+For linting, we are using eslint (configured in `eslint.config.js`) and to run
+it, you can just use:
 
 ```bash
 yarn lint
+```
+
+To let eslint fix what it can:
+
+```bash
+yarn lint-fix
 ```
 
 ### Testing
