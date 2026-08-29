@@ -1,33 +1,38 @@
-// Words that name a colour are shown in it. The 16 terminal colours cover
-// most of these; the rest are given the nearest hex, which blessed accepts
+const theme = require("./theme");
+
+const dracula = theme.PALETTE;
+
+// Words that name a colour are shown in it, in the shade the rest of the
+// reader is drawn in. Colours the palette has no name for are given the
+// nearest hex, which blessed accepts
 const COLOURS = {
-	black: "black",
-	white: "white",
-	red: "red",
-	green: "green",
-	blue: "blue",
-	yellow: "yellow",
-	magenta: "magenta",
-	cyan: "cyan",
-	grey: "grey",
-	gray: "grey",
-	silver: "grey",
-	purple: "magenta",
-	violet: "magenta",
-	pink: "#ff87d7",
-	orange: "#ffaf00",
-	brown: "#875f00",
-	gold: "#ffd700",
+	red: dracula.red,
+	green: dracula.green,
+	blue: "#6272ff",
+	yellow: dracula.yellow,
+	cyan: dracula.cyan,
+	magenta: dracula.pink,
+	pink: dracula.pink,
+	purple: dracula.purple,
+	violet: dracula.purple,
+	orange: dracula.orange,
+	white: dracula.foreground,
+	black: dracula.background,
+	grey: dracula.comment,
+	gray: dracula.comment,
+	silver: dracula.comment,
+	gold: dracula.yellow,
 	beige: "#d7d7af",
+	brown: "#875f00",
 	indigo: "#5f00af",
-	turquoise: "#00d7d7",
+	turquoise: dracula.cyan,
 	teal: "#008080",
 	navy: "#000087",
 	olive: "#808000",
 	maroon: "#800000",
-	crimson: "#d70000",
-	scarlet: "#d70000",
-	lime: "#87ff00"
+	crimson: dracula.red,
+	scarlet: dracula.red,
+	lime: dracula.green
 };
 
 // A sentence ends on one of these; an exclamation mark makes the whole
@@ -38,7 +43,7 @@ const EXCLAIMS = /!/;
 // A word counts as a repeat if it turned up in the last few words or earlier
 // in the same sentence. Repetition blindness makes the second one easy to miss
 const REPEAT_WINDOW = 10;
-const REPEAT_COLOUR = "#8787ff";
+const REPEAT_COLOUR = dracula.orange;
 
 // Function words repeat constantly and carry no meaning to miss
 const COMMON = [

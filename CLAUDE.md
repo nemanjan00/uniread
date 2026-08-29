@@ -93,7 +93,8 @@ underscore-prefixed internals. Playback is a self-rescheduling `setTimeout`
 timers per word: one to blank the screen, one for the next word. All the
 durations come from `timing.js`, and what a word looks like comes from
 `style.js`; both are pure and unit-tested — put those decisions there rather
-than inline. Three details matter when editing it:
+than inline. Every colour, the widget styles included, comes from `theme.js`
+(the Dracula palette) — never hardcode one at a call site. Three details matter when editing it:
 
 - `list.select()` emits `select item`, so the tick's chapter auto-follow goes
   through `_follow()`, which sets `_following` to make the handler ignore it.

@@ -2,6 +2,7 @@ const expect = require("chai").expect;
 
 const timing = require("../../src/interfaces/cli/timing");
 const style = require("../../src/interfaces/cli/style");
+const theme = require("../../src/interfaces/cli/theme");
 
 describe("Reader timing", function() {
 	describe("How long a word is held", function() {
@@ -52,18 +53,21 @@ describe("Reader styling", function() {
 
 	describe("Colour names", function() {
 		it("Shows a colour word in its colour", function() {
-			expect(styleOf("the sky was blue", "blue").colour).to.equal("blue");
-			expect(styleOf("the grass was green", "green").colour).to.equal("green");
+			expect(styleOf("the sky was blue", "blue").colour).to.equal(style.COLOURS.blue);
+			expect(styleOf("the grass was green", "green").colour).to.equal(theme.PALETTE.green);
 		});
 
 		it("Looks past the punctuation stuck to a word", function() {
-			expect(styleOf("it was red.", "red.").colour).to.equal("red");
-			expect(styleOf("it was Yellow!", "Yellow!").colour).to.equal("yellow");
+			expect(styleOf("it was red.", "red.").colour).to.equal(theme.PALETTE.red);
+			expect(styleOf("it was Yellow!", "Yellow!").colour).to.equal(theme.PALETTE.yellow);
 		});
 
-		it("Gives a colour the terminal lacks the nearest shade", function() {
-			expect(styleOf("the orange sun", "orange").colour).to.equal(style.COLOURS.orange);
-			expect(style.COLOURS.orange).to.match(/^#[0-9a-f]{6}$/);
+		it("Draws its colours from the theme", function() {
+			expect(styleOf("the orange sun", "orange").colour).to.equal(theme.PALETTE.orange);
+
+			Object.keys(style.COLOURS).forEach((name) => {
+				expect(style.COLOURS[name]).to.match(/^#[0-9a-f]{6}$/);
+			});
 		});
 
 		it("Leaves ordinary words alone", function() {
@@ -151,21 +155,21 @@ describe("Reader styling", function() {
 			expect(style.decorate("dog", {repeated: true}))
 				.to.equal("{" + style.REPEAT_COLOUR + "-fg}dog{/" + style.REPEAT_COLOUR + "-fg}");
 
-			expect(style.decorate("red", {repeated: true, colour: "red"}))
-				.to.equal("{red-fg}red{/red-fg}");
+			expect(style.decorate("red", {repeated: true, colour: theme.PALETTE.red}))
+				.to.equal("{" + theme.PALETTE.red + "-fg}red{/" + theme.PALETTE.red + "-fg}");
 		});
 	});
 
 	describe("Turning it into markup", function() {
 		it("Wraps a word in blessed tags", function() {
-			expect(style.decorate("blue", {colour: "blue"})).to.equal("{blue-fg}blue{/blue-fg}");
+			expect(style.decorate("blue", {colour: "#6272ff"})).to.equal("{#6272ff-fg}blue{/#6272ff-fg}");
 			expect(style.decorate("out!", {emphatic: true})).to.equal("{bold}out!{/bold}");
 			expect(style.decorate("said", {quoted: true})).to.equal("{underline}said{/underline}");
 		});
 
 		it("Nests the tags it needs together", function() {
-			expect(style.decorate("red", {colour: "red", quoted: true, emphatic: true}))
-				.to.equal("{red-fg}{bold}{underline}red{/underline}{/bold}{/red-fg}");
+			expect(style.decorate("red", {colour: "#ff5555", quoted: true, emphatic: true}))
+				.to.equal("{#ff5555-fg}{bold}{underline}red{/underline}{/bold}{/#ff5555-fg}");
 		});
 
 		it("Leaves a word alone when there is nothing to say about it", function() {

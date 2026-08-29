@@ -9,6 +9,7 @@ const Grid = require("blessed-contrib/lib/layout/grid");
 const picker = require("./picker");
 const timing = require("./timing");
 const style = require("./style");
+const theme = require("./theme");
 
 // Words between progress writes, so resuming stays accurate without
 // hammering the disk on every tick
@@ -72,7 +73,7 @@ module.exports = (book, options) => {
 		},
 
 		_init: (book) => {
-			const screenOptions = {debug: true};
+			const screenOptions = {debug: true, style: theme.screen};
 
 			// A book arriving on stdin leaves nothing there to read keys from
 			if(options.input){
@@ -84,7 +85,8 @@ module.exports = (book, options) => {
 			var grid = new Grid({rows: 12, cols: 12, screen: player._screen});
 
 			player._textBox = grid.set(0, 6, 2, 6, blessed.box, {
-				label: "Book"
+				label: "Book",
+				style: theme.box
 			});
 
 			book.links = book.links.filter((chapter) => chapter.name !== undefined);
@@ -97,7 +99,8 @@ module.exports = (book, options) => {
 			player._saved = player._current;
 
 			player._reportBox = grid.set(2, 6, 2, 6, blessed.box, {
-				label: "Info"
+				label: "Info",
+				style: theme.box
 			});
 
 			player._reportText = blessed.text({
@@ -107,29 +110,22 @@ module.exports = (book, options) => {
 			player._reportBox.append(player._reportText);
 
 			player._chapterList = grid.set(0, 0, 11, 6, blessed.list, {
-				style: {
-					selected: {
-						bg: "red"
-					}
-				},
+				style: theme.list,
 				label: "Chapters",
 				items: chapters,
 				mouse: true
 			});
 
 			let help = grid.set(11, 0, 1, 12, blessed.text, {
-				style: {
-					selected: {
-						bg: "red"
-					}
-				},
-				label: "help",
+				style: theme.help,
+				label: "help"
 			});
 
 			help.append(blessed.text({label: "space pause | j/k chapter | -/+ speed | h/l word | f flash | s style | C-k recent | q escape "}));
 
 			player._text = blessed.text({
 				label: "Book",
+				style: theme.box,
 
 				// So the word can carry colour and emphasis
 				tags: true

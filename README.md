@@ -104,6 +104,12 @@ Uniread blanks the screen briefly between words, so each word is read rather
 than half remembered from the pixels the last one left behind. Press `f` if you
 would rather each word simply replaced the one before it.
 
+### Colours
+
+Uniread is drawn in the [Dracula](https://draculatheme.com/) palette, and the
+styling below takes its colours from the same place. On a terminal that only
+knows sixteen colours, each is shown as the nearest shade it has.
+
 ### Styled words
 
 Uniread reads a little meaning out of each word and shows it: a word that names

@@ -1,5 +1,7 @@
 const blessed = require("blessed");
 
+const theme = require("./theme");
+
 const percent = (entry) => {
 	if(!entry.total){
 		return 0;
@@ -31,11 +33,7 @@ const choose = (screen, entries) => {
 			keys: true,
 			vi: true,
 			mouse: true,
-			style: {
-				selected: {
-					bg: "red"
-				}
-			},
+			style: theme.list,
 			items: entries.map(label)
 		});
 
