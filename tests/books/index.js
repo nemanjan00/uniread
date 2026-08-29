@@ -15,6 +15,59 @@ const pdf = require("../../src/sources/pdf");
 const text = require("../../src/sources/text");
 const markdown = require("../../src/sources/markdown");
 const html = require("../../src/sources/html");
+const docx = require("../../src/sources/docx");
+const fb2 = require("../../src/sources/fb2");
+const mobi = require("../../src/sources/mobi");
+
+const JSZip = require("jszip");
+
+// A minimal Word document, built rather than committed as a binary
+const writeDocx = (file) => {
+	const document = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+		"<w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body>" +
+		"<w:p><w:pPr><w:pStyle w:val=\"Heading1\"/></w:pPr><w:r><w:t>The Book</w:t></w:r></w:p>" +
+		"<w:p><w:r><w:t>Front matter.</w:t></w:r></w:p>" +
+		"<w:p><w:pPr><w:pStyle w:val=\"Heading2\"/></w:pPr><w:r><w:t>First</w:t></w:r></w:p>" +
+		"<w:p><w:r><w:t>Alpha beta gamma.</w:t></w:r></w:p>" +
+		"<w:p><w:pPr><w:pStyle w:val=\"Heading2\"/></w:pPr><w:r><w:t>Second</w:t></w:r></w:p>" +
+		"<w:p><w:r><w:t>Delta epsilon.</w:t></w:r></w:p>" +
+		"</w:body></w:document>";
+
+	const types = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+		"<Types xmlns=\"http://schemas.openxmlformats.org/package/2006/content-types\">" +
+		"<Default Extension=\"xml\" ContentType=\"application/xml\"/>" +
+		"<Default Extension=\"rels\" ContentType=\"application/vnd.openxmlformats-package.relationships+xml\"/>" +
+		"<Override PartName=\"/word/document.xml\" ContentType=\"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml\"/>" +
+		"</Types>";
+
+	const rels = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
+		"<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\">" +
+		"<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument\" Target=\"word/document.xml\"/>" +
+		"</Relationships>";
+
+	const zip = new JSZip();
+
+	zip.file("[Content_Types].xml", types);
+	zip.folder("_rels").file(".rels", rels);
+	zip.folder("word").file("document.xml", document);
+
+	return zip.generateAsync({type: "nodebuffer"}).then((buffer) => {
+		fs.writeFileSync(file, buffer);
+	});
+};
+
+const FB2 = [
+	"<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+	"<FictionBook xmlns=\"http://www.gribuser.ru/xml/fictionbook/2.0\">",
+	"<description><title-info><book-title>A Fiction Book</book-title></title-info></description>",
+	"<body>",
+	"<p>Loose opening line.</p>",
+	"<section><title><p>First</p></title><p>Alpha beta gamma.</p><p>Delta.</p>",
+	"<section><title><p>First, part two</p></title><p>Nested text.</p></section>",
+	"</section>",
+	"<section><title><p>Second</p></title><p>Epsilon zeta.</p></section>",
+	"</body></FictionBook>"
+].join("\n");
 
 const sources = require("../../src/sources");
 
@@ -64,7 +117,8 @@ const validateBookFormat = (engine, file, done) => {
 
 let files = [
 	"./books/Metamorphosis-jackson.epub",
-	"./books/Metamorphosis-jackson.pdf"
+	"./books/Metamorphosis-jackson.pdf",
+	"./books/Metamorphosis-jackson.mobi"
 ];
 
 describe("Book engines", function() {
@@ -207,6 +261,117 @@ describe("Book engines", function() {
 		});
 	});
 
+	describe("mobi book engine", function() {
+		it("Decodes mobi book into uniread format", function(done) {
+			validateBookFormat(mobi, "./books/Metamorphosis-jackson.mobi", done);
+		});
+
+		it("Decompresses the text and reads its title", function() {
+			return mobi("./books/Metamorphosis-jackson.mobi").then((book) => {
+				expect(book.getTitle()).to.equal("Metamorphosis");
+
+				return book.getChapters();
+			}).then((chapters) => {
+				expect(chapters.map((chapter) => chapter.title)).to.include("CHAPTER I");
+
+				const words = chapters.reduce((count, chapter) => {
+					return count + chapter.content.split(/\s+/).filter((word) => word !== "").length;
+				}, 0);
+
+				// The same book as the epub and pdf samples, so the text
+				// should be of the same order
+				expect(words).to.be.above(20000);
+			});
+		});
+
+		it("Rejects something that is not a mobi book", function() {
+			return expect(mobi("./index.js")).to.be.rejectedWith("Not a mobi book");
+		});
+	});
+
+	describe("docx book engine", function() {
+		let file;
+
+		before(function() {
+			file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "uniread-")), "book.docx");
+
+			return writeDocx(file);
+		});
+
+		after(function() {
+			fs.rmSync(path.dirname(file), {recursive: true, force: true});
+		});
+
+		it("Decodes docx into uniread format", function(done) {
+			validateBookFormat(docx, file, done);
+		});
+
+		it("Splits chapters on heading styles", function() {
+			return docx(file).then((book) => {
+				expect(book.getTitle()).to.equal("The Book");
+
+				return book.getChapters();
+			}).then((chapters) => {
+				expect(chapters.map((chapter) => chapter.title)).to.deep.equal(["The Book", "First", "Second"]);
+				expect(chapters[1].content).to.include("Alpha beta gamma");
+			});
+		});
+	});
+
+	describe("fb2 book engine", function() {
+		let file;
+
+		before(function() {
+			file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "uniread-")), "book.fb2");
+
+			fs.writeFileSync(file, FB2);
+		});
+
+		after(function() {
+			fs.rmSync(path.dirname(file), {recursive: true, force: true});
+		});
+
+		it("Decodes fb2 into uniread format", function(done) {
+			validateBookFormat(fb2, file, done);
+		});
+
+		it("Takes the title from the book description", function() {
+			return fb2(file).then((book) => {
+				expect(book.getTitle()).to.equal("A Fiction Book");
+			});
+		});
+
+		it("Makes a chapter of every section, nested ones indented", function() {
+			return fb2(file).then((book) => {
+				return book.getChapters();
+			}).then((chapters) => {
+				expect(chapters.map((chapter) => chapter.title)).to.deep.equal([
+					"Beginning",
+					"First",
+					"  First, part two",
+					"Second"
+				]);
+			});
+		});
+
+		it("Does not repeat a nested section inside its parent", function() {
+			return fb2(file).then((book) => {
+				return book.getChapters();
+			}).then((chapters) => {
+				expect(chapters[1].content).to.equal("Alpha beta gamma. Delta.");
+				expect(chapters[2].content).to.equal("Nested text.");
+			});
+		});
+
+		it("Rejects a document that is not a FictionBook", function() {
+			const other = path.join(path.dirname(file), "other.fb2");
+
+			fs.writeFileSync(other, "<other><p>hello</p></other>");
+
+			return expect(fb2(other)).to.be.rejectedWith("Not a FictionBook");
+		});
+	});
+
 	describe("text book engine", function() {
 		let file;
 
@@ -235,7 +400,7 @@ describe("Book engines", function() {
 				expect(sources._detectEngine("./books/Metamorphosis-jackson.pdf")).to.eventually.equal(sources.engines.pdf),
 				expect(sources._detectEngine("./books/Metamorphosis-jackson.epub")).to.eventually.equal(sources.engines.epub),
 				expect(sources._detectEngine("./index.js")).to.eventually.equal(false),
-				expect(sources._detectEngine("./books/Metamorphosis-jackson.mobi")).to.eventually.equal(false)
+				expect(sources._detectEngine("./books/Metamorphosis-jackson.mobi")).to.eventually.equal(sources.engines.mobi)
 			]);
 		});
 
@@ -251,6 +416,9 @@ describe("Book engines", function() {
 			expect(sources.extensions[".md"]).to.equal(sources.engines.markdown);
 			expect(sources.extensions[".html"]).to.equal(sources.engines.html);
 			expect(sources.extensions[".txt"]).to.equal(sources.engines.text);
+			expect(sources.extensions[".fb2"]).to.equal(sources.engines.fb2);
+			expect(sources.extensions[".docx"]).to.equal(sources.engines.docx);
+			expect(sources.extensions[".mobi"]).to.equal(sources.engines.mobi);
 		});
 	});
 
@@ -266,10 +434,7 @@ describe("Book engines", function() {
 		});
 
 		it("Detects engine for invalid formats", function() {
-			return Promise.all([
-				expect(sources.detectEngine("./index.js")).to.be.rejected,
-				expect(sources.detectEngine("./books/Metamorphosis-jackson.mobi")).to.be.rejected
-			]);
+			return expect(sources.detectEngine("./index.js")).to.be.rejected;
 		});
 
 		it("Rejects rather than throwing for a missing file", function() {

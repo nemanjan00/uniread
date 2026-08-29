@@ -41,10 +41,16 @@ We try to support as much as possible of ebook formats. If you have any kind of 
 * pdf (thanks to [Mozilla pdf.js](https://github.com/mozilla/pdf.js) library)
 * markdown, `.md` / `.markdown` (thanks to [marked](https://github.com/markedjs/marked) library)
 * html, `.html` / `.htm` / `.xhtml`
+* mobi, `.mobi` / `.prc` / `.azw`
+* docx (thanks to [mammoth](https://github.com/mwilliamson/mammoth.js) library)
+* fb2, FictionBook
 
 Where a format says how it is divided up, uniread follows it: epub uses its
-spine, pdf its bookmarks, and markdown and html their top two heading levels.
-Everything else is read as a single chapter.
+spine, pdf its bookmarks, fb2 its sections, and markdown, html, docx and mobi
+their top two heading levels. Everything else is read as a single chapter.
+
+Mobi books using HUFF/CDIC compression, and any DRM protected book, cannot be
+read.
 
 ## Installation / update
 

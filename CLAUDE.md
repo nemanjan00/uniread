@@ -42,9 +42,9 @@ sources  →  methods/spritz  →  interfaces/cli
                                   library
 ```
 
-**`src/sources/`** — one directory per format (epub, pdf, markdown, html,
-text), each exporting `(filename) => Promise<book>`. Every engine must satisfy
-the same contract:
+**`src/sources/`** — one directory per format (epub, pdf, mobi, docx, fb2,
+markdown, html, text), each exporting `(filename) => Promise<book>`. Every
+engine must satisfy the same contract:
 
 - `getTitle() => string`
 - `getChapters() => Promise<[{id, title, content}]>` where `content` is text
@@ -57,15 +57,25 @@ unreadable files. Adding a format means adding a directory, registering it in
 
 Chapters come from whatever structure the format itself carries: the epub
 spine, the pdf outline (resolved from bookmark destinations to page indices, so
-chapter boundaries land on page edges), and the top two heading levels for
-markdown and html. Text has none, so it returns a single chapter. Anything
-before the first heading or bookmark becomes a "Beginning" chapter rather than
-being dropped.
+chapter boundaries land on page edges), fb2 sections, and the top two heading
+levels for everything that reduces to html. Text has none, so it returns a
+single chapter. Anything before the first heading or bookmark becomes a
+"Beginning" chapter rather than being dropped.
 
 `src/sources/markup.js` holds the shared html-to-text conversion and the
-heading splitter; epub, markdown and html all go through it, so markup handling
-stays consistent across formats. Markdown is converted to html by `marked`
-first for exactly that reason.
+heading splitter. Most sources reduce their format to html and hand it over —
+markdown through `marked`, docx through `mammoth`, mobi after decompression —
+so markup handling stays consistent across formats. Prefer that route when
+adding a format.
+
+`src/sources/mobi/` is the one hand-written parser, because no maintained
+CommonJS mobi library exists: it walks the Palm database records, strips the
+trailing bookkeeping bytes each record carries, and decompresses the PalmDOC
+LZ77 stream in `palmdoc.js`. HUFF/CDIC compressed and DRM protected books are
+detected and rejected with a specific message rather than producing rubbish.
+
+Sources must hand back native promises — `mammoth` returns its own
+implementation, so the docx source wraps it.
 
 **`src/methods/spritz/`** — `transformChapters` is the core transform: it
 concatenates every chapter's words into `book.text` and records `book.links` as
