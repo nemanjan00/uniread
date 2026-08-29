@@ -7,15 +7,14 @@ const blessed = require("blessed");
 const Grid = require("blessed-contrib/lib/layout/grid");
 
 const picker = require("./picker");
+const timing = require("./timing");
 
 // Words between progress writes, so resuming stays accurate without
 // hammering the disk on every tick
 const SAVE_EVERY = 50;
 
 // `options` is optional: {file, library, open} enables resume and the recent
-// book picker, `open` is what loads another book (file => Promise<book>),
-// `paused` starts the reader stopped, and `input` is where key presses come
-// from when stdin is busy carrying the book itself
+// book picker, and `open` is what loads another book (file => Promise<book>)
 module.exports = (book, options) => {
 	options = options || {};
 
@@ -23,6 +22,10 @@ module.exports = (book, options) => {
 		_speed: 250,
 		_book: undefined,
 		_current: 0,
+
+		// Blank the screen between words, so each one is read rather than
+		// half remembered from the pixels the last one left behind
+		_flash: true,
 
 		_file: options.file,
 		_library: options.library,
@@ -43,7 +46,7 @@ module.exports = (book, options) => {
 		_chapter: -1,
 
 		_report: () => {
-			return "Speed: " + player._speed + "ms / " + (Math.round(60 * 1000 / player._speed)) + " WPM\nProgress: " + player._current + "/" + player._book.text.length + "\nTime left: " + player._niceTime();
+			return "Speed: " + player._speed + "ms / " + (Math.round(60 * 1000 / player._speed)) + " WPM\nProgress: " + player._current + "/" + player._book.text.length + "\nTime left: " + player._niceTime() + "\nFlash: " + (player._flash ? "on" : "off");
 		},
 
 		_niceTime: () => {
@@ -63,7 +66,7 @@ module.exports = (book, options) => {
 		},
 
 		_init: (book) => {
-			player._screen = blessed.screen(options.input ? {debug: true, input: options.input} : {debug: true});
+			player._screen = blessed.screen({debug: true});
 
 			var grid = new Grid({rows: 12, cols: 12, screen: player._screen});
 
@@ -109,7 +112,7 @@ module.exports = (book, options) => {
 				label: "help",
 			});
 
-			help.append(blessed.text({label: "space pause | j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward | C-k recent books | q escape "}));
+			help.append(blessed.text({label: "space pause | j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward | f flash | C-k recent books | q escape "}));
 
 			player._text = blessed.text({
 				label: "Book"
@@ -125,6 +128,12 @@ module.exports = (book, options) => {
 
 			player._screen.key(["C-k"], function() {
 				player._pickRecent();
+			});
+
+			player._screen.key(["f"], function() {
+				player._flash = !player._flash;
+
+				player._draw();
 			});
 
 			player._screen.key(["space"], function() {
@@ -303,6 +312,9 @@ module.exports = (book, options) => {
 			return player._current >= player._book.text.length;
 		},
 
+		// Shows the word at _current, then schedules the next one. With
+		// flashing on, the screen is blanked for the last stretch of the
+		// word's time rather than the next word replacing it in place
 		_tickFunction: () => {
 			if(player._atEnd()){
 				player._tick = undefined;
@@ -310,35 +322,56 @@ module.exports = (book, options) => {
 				return;
 			}
 
-			let previous = player._book.text[player._current - 1] || "";
+			const word = player._book.text[player._current];
 
-			player._screen.debug(previous);
+			player._screen.debug(word);
+
+			player._followChapter();
+
+			player._draw();
+
+			player._current++;
+
+			if(Math.abs(player._current - player._saved) >= SAVE_EVERY){
+				player._persist();
+			}
+
+			const hold = timing.hold(word, player._speed);
+			const gap = timing.gap(player._speed, player._flash);
+
+			// Nothing follows the last word, so leave it on screen
+			if(gap === 0 || player._atEnd()){
+				player._tick = setTimeout(player._tickFunction, hold);
+
+				return;
+			}
 
 			player._tick = setTimeout(() => {
-				let currentChapter = -1;
+				player._blank();
 
-				player._book.links.some((link, key) => {
-					currentChapter = key - 1;
+				player._tick = setTimeout(player._tickFunction, gap);
+			}, Math.max(hold - gap, 1));
+		},
 
-					return link.word > player._current + 1;
-				});
+		_followChapter: () => {
+			let currentChapter = -1;
 
-				if(currentChapter !== player._chapter){
-					player._chapter = currentChapter;
+			player._book.links.some((link, key) => {
+				currentChapter = key - 1;
 
-					player._follow(currentChapter);
-				}
+				return link.word > player._current + 1;
+			});
 
-				player._draw();
+			if(currentChapter !== player._chapter){
+				player._chapter = currentChapter;
 
-				player._current++;
+				player._follow(currentChapter);
+			}
+		},
 
-				if(Math.abs(player._current - player._saved) >= SAVE_EVERY){
-					player._persist();
-				}
-
-				player._tickFunction();
-			}, (/[,.?!;]/.test(previous)?2:1) * player._speed);
+		_blank: () => {
+			player._text.setLabel(player._focusText(""));
+			player._screen.render();
 		},
 
 		_focusText: (text) => {

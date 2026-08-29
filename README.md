@@ -95,8 +95,13 @@ uniread --paused ~/Books/somebook.epub
 | `j` / `k` (or arrows) | Next / previous chapter |
 | `+` / `-` | Speed up / slow down |
 | `h` / `l` (or arrows) | Rewind / forward one word |
+| `f` | Flash the word on and off, or leave it on screen |
 | `ctrl+k` | Open a recently read book |
 | `q` / `escape` | Quit |
+
+Uniread blanks the screen briefly between words, so each word is read rather
+than half remembered from the pixels the last one left behind. Press `f` if you
+would rather each word simply replaced the one before it.
 
 ### Resuming and recent books
 
