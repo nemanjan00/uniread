@@ -8,6 +8,7 @@ const Grid = require("blessed-contrib/lib/layout/grid");
 
 const picker = require("./picker");
 const timing = require("./timing");
+const style = require("./style");
 
 // Words between progress writes, so resuming stays accurate without
 // hammering the disk on every tick
@@ -26,6 +27,11 @@ module.exports = (book, options) => {
 		// Blank the screen between words, so each one is read rather than
 		// half remembered from the pixels the last one left behind
 		_flash: true,
+
+		// Colour, emphasis and quotation marks taken from the words
+		// themselves
+		_styled: true,
+		_styles: [],
 
 		_file: options.file,
 		_library: options.library,
@@ -46,7 +52,7 @@ module.exports = (book, options) => {
 		_chapter: -1,
 
 		_report: () => {
-			return "Speed: " + player._speed + "ms / " + (Math.round(60 * 1000 / player._speed)) + " WPM\nProgress: " + player._current + "/" + player._book.text.length + "\nTime left: " + player._niceTime() + "\nFlash: " + (player._flash ? "on" : "off");
+			return "Speed: " + player._speed + "ms / " + (Math.round(60 * 1000 / player._speed)) + " WPM\nProgress: " + player._current + "/" + player._book.text.length + "\nTime left: " + player._niceTime() + "\nFlash: " + (player._flash ? "on" : "off") + "  Style: " + (player._styled ? "on" : "off");
 		},
 
 		_niceTime: () => {
@@ -79,6 +85,7 @@ module.exports = (book, options) => {
 			let chapters = book.links.map(link => link.name);
 
 			player._book = book;
+			player._styles = style.styles(book.text);
 			player._current = player._resumeAt(book);
 			player._saved = player._current;
 
@@ -112,10 +119,13 @@ module.exports = (book, options) => {
 				label: "help",
 			});
 
-			help.append(blessed.text({label: "space pause | j/k Next/prev chapter | -/+ speed up/down | h/l rewind back/forward | f flash | C-k recent books | q escape "}));
+			help.append(blessed.text({label: "space pause | j/k chapter | -/+ speed | h/l word | f flash | s style | C-k recent | q escape "}));
 
 			player._text = blessed.text({
-				label: "Book"
+				label: "Book",
+
+				// So the word can carry colour and emphasis
+				tags: true
 			});
 
 			player._textBox.append(player._text);
@@ -132,6 +142,12 @@ module.exports = (book, options) => {
 
 			player._screen.key(["f"], function() {
 				player._flash = !player._flash;
+
+				player._draw();
+			});
+
+			player._screen.key(["s"], function() {
+				player._styled = !player._styled;
 
 				player._draw();
 			});
@@ -278,6 +294,7 @@ module.exports = (book, options) => {
 			book.links = book.links.filter((chapter) => chapter.name !== undefined);
 
 			player._book = book;
+			player._styles = style.styles(book.text);
 			player._current = player._resumeAt(book);
 			player._saved = player._current;
 			player._saved = player._current;
@@ -304,7 +321,7 @@ module.exports = (book, options) => {
 		_draw: () => {
 			player._reportText.setLabel(player._report());
 
-			player._text.setLabel(player._focusText(player._book.text[player._current]));
+			player._text.setLabel(player._focusText(player._book.text[player._current], player._styleAt(player._current)));
 			player._screen.render();
 		},
 
@@ -374,10 +391,18 @@ module.exports = (book, options) => {
 			player._screen.render();
 		},
 
-		_focusText: (text) => {
+		_styleAt: (key) => {
+			return player._styled ? player._styles[key] : undefined;
+		},
+
+		_focusText: (text, wordStyle) => {
 			text = text || "";
 
 			let length = Math.ceil((7 - text.length) / 2);
+
+			// Markup would throw the centring out, so the word is padded
+			// after it is decorated, never before
+			text = style.decorate(text, wordStyle);
 
 			for(let i = length; i > 0; i--){
 				text = " " + text;

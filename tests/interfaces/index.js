@@ -1,6 +1,7 @@
 const expect = require("chai").expect;
 
 const timing = require("../../src/interfaces/cli/timing");
+const style = require("../../src/interfaces/cli/style");
 
 describe("Reader timing", function() {
 	describe("How long a word is held", function() {
@@ -38,6 +39,98 @@ describe("Reader timing", function() {
 		it("Stays visible but brief at any speed", function() {
 			expect(timing.gap(10, true)).to.be.at.least(1);
 			expect(timing.gap(5000, true)).to.equal(timing.GAP_LIMIT);
+		});
+	});
+});
+
+describe("Reader styling", function() {
+	const styleOf = (sentence, word) => {
+		const words = sentence.split(" ");
+
+		return style.styles(words)[words.indexOf(word)];
+	};
+
+	describe("Colour names", function() {
+		it("Shows a colour word in its colour", function() {
+			expect(styleOf("the sky was blue", "blue").colour).to.equal("blue");
+			expect(styleOf("the grass was green", "green").colour).to.equal("green");
+		});
+
+		it("Looks past the punctuation stuck to a word", function() {
+			expect(styleOf("it was red.", "red.").colour).to.equal("red");
+			expect(styleOf("it was Yellow!", "Yellow!").colour).to.equal("yellow");
+		});
+
+		it("Gives a colour the terminal lacks the nearest shade", function() {
+			expect(styleOf("the orange sun", "orange").colour).to.equal(style.COLOURS.orange);
+			expect(style.COLOURS.orange).to.match(/^#[0-9a-f]{6}$/);
+		});
+
+		it("Leaves ordinary words alone", function() {
+			expect(styleOf("the sky was clear", "clear").colour).to.equal(undefined);
+		});
+	});
+
+	describe("Quotations", function() {
+		it("Marks every word between the quotes", function() {
+			const words = "she said \"that is red\" loudly".split(" ");
+			const styles = style.styles(words);
+
+			expect(styles.map((each) => each.quoted)).to.deep.equal([false, false, true, true, true, false]);
+		});
+
+		it("Handles typographic quotes", function() {
+			const words = "she said \u201Cthat is red\u201D loudly".split(" ");
+			const styles = style.styles(words);
+
+			expect(styles.map((each) => each.quoted)).to.deep.equal([false, false, true, true, true, false]);
+		});
+
+		it("Does not open a quotation on an apostrophe", function() {
+			const words = "it doesn't matter at all".split(" ");
+
+			style.styles(words).forEach((each) => {
+				expect(each.quoted).to.equal(false);
+			});
+		});
+	});
+
+	describe("Emphatic sentences", function() {
+		it("Emphasises a whole sentence that ends in an exclamation", function() {
+			const words = "it was calm. watch out! it was calm again.".split(" ");
+			const styles = style.styles(words);
+
+			expect(styles.map((each) => each.emphatic === true)).to.deep.equal([
+				false, false, false,
+				true, true,
+				false, false, false, false
+			]);
+		});
+
+		it("Leaves a trailing fragment unemphasised", function() {
+			const words = "no ending here".split(" ");
+
+			style.styles(words).forEach((each) => {
+				expect(each.emphatic).to.equal(undefined);
+			});
+		});
+	});
+
+	describe("Turning it into markup", function() {
+		it("Wraps a word in blessed tags", function() {
+			expect(style.decorate("blue", {colour: "blue"})).to.equal("{blue-fg}blue{/blue-fg}");
+			expect(style.decorate("out!", {emphatic: true})).to.equal("{bold}out!{/bold}");
+			expect(style.decorate("said", {quoted: true})).to.equal("{underline}said{/underline}");
+		});
+
+		it("Nests the tags it needs together", function() {
+			expect(style.decorate("red", {colour: "red", quoted: true, emphatic: true}))
+				.to.equal("{red-fg}{bold}{underline}red{/underline}{/bold}{/red-fg}");
+		});
+
+		it("Leaves a word alone when there is nothing to say about it", function() {
+			expect(style.decorate("word", undefined)).to.equal("word");
+			expect(style.decorate("word", {})).to.equal("word");
 		});
 	});
 });

@@ -96,12 +96,23 @@ uniread --paused ~/Books/somebook.epub
 | `+` / `-` | Speed up / slow down |
 | `h` / `l` (or arrows) | Rewind / forward one word |
 | `f` | Flash the word on and off, or leave it on screen |
+| `s` | Style words, or show them plain |
 | `ctrl+k` | Open a recently read book |
 | `q` / `escape` | Quit |
 
 Uniread blanks the screen briefly between words, so each word is read rather
 than half remembered from the pixels the last one left behind. Press `f` if you
 would rather each word simply replaced the one before it.
+
+### Styled words
+
+Uniread reads a little meaning out of each word and shows it: a word that names
+a colour appears in that colour, a quotation is underlined, and a sentence
+ending in an exclamation mark is emboldened. Press `s` for plain words instead.
+
+Underline stands in for italic, which terminals do not reliably offer, and a
+colour outside the sixteen a terminal knows is shown as the nearest shade it
+has.
 
 ### Resuming and recent books
 

@@ -91,14 +91,18 @@ that single array, so nothing above this layer knows about chapters as such.
 underscore-prefixed internals. Playback is a self-rescheduling `setTimeout`
 (`_tickFunction`), not an interval, and with flashing on it schedules two
 timers per word: one to blank the screen, one for the next word. All the
-durations come from `timing.js`, which is pure and unit-tested — put timing
-decisions there rather than inline. Three details matter when editing it:
+durations come from `timing.js`, and what a word looks like comes from
+`style.js`; both are pure and unit-tested — put those decisions there rather
+than inline. Three details matter when editing it:
 
 - `list.select()` emits `select item`, so the tick's chapter auto-follow goes
   through `_follow()`, which sets `_following` to make the handler ignore it.
   Without that guard, playback snaps back to the chapter start.
 - The picker sets `screen.grabKeys` so the reader's global key bindings do not
   fire while the overlay is up.
+- The word widget is built with `tags: true`, without which blessed prints the
+  style markup literally. `_focusText` decorates before padding, so the markup
+  is not counted when centring the word.
 - Import the grid as `blessed-contrib/lib/layout/grid`, never the package
   index: that pulls in the markdown widget and with it `marked-terminal`,
   which crashed the reader on older node (issue #90).
