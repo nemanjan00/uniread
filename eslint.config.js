@@ -19,7 +19,10 @@ module.exports = [
 			"linebreak-style": ["error", "unix"],
 			quotes: ["error", "double"],
 			semi: ["error", "always"],
-			"no-console": 0
+			"no-console": 0,
+			"no-trailing-spaces": "error",
+			"eol-last": ["error", "always"],
+			"no-multiple-empty-lines": ["error", {max: 1, maxEOF: 0, maxBOF: 0}]
 		}
 	},
 	{

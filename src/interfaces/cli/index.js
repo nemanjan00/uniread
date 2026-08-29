@@ -360,4 +360,3 @@ module.exports = (book, options) => {
 
 	return player._init(book);
 };
-

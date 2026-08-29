@@ -1,7 +1,7 @@
 const chai = require("chai");
 
 const chaiAsPromised = require("chai-as-promised");
- 
+
 chai.use(chaiAsPromised);
 
 const expect = chai.expect;
@@ -92,7 +92,7 @@ const validateBookFormat = (engine, file, done) => {
 			promise = book.getChapters();
 
 			expect(promise).to.be.a("promise");
-				
+
 			promise.then((chapters) => {
 				try {
 					expect(chapters).to.be.a("array");
@@ -127,7 +127,6 @@ describe("Book engines", function() {
 			validateBookFormat(epub, "./books/Metamorphosis-jackson.epub", done);
 		});
 	});
-
 
 	describe("pdf book engine", function() {
 		it("Decodes pdf book into uniread format", function(done) {
@@ -442,4 +441,3 @@ describe("Book engines", function() {
 		});
 	});
 });
-
