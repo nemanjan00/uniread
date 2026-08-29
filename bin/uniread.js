@@ -4,6 +4,7 @@ const updateNotifier = require("update-notifier");
 const pkg = require("../package.json");
 
 const fs = require("fs");
+const tty = require("tty");
 
 const uniread = require("../");
 
@@ -46,7 +47,9 @@ const readStdin = () => {
 		let input;
 
 		try {
-			input = fs.createReadStream("/dev/tty");
+			// A plain read stream is not enough: blessed needs something it
+			// can put into raw mode to see key presses
+			input = new tty.ReadStream(fs.openSync("/dev/tty", "r"));
 		} catch {
 			// Without a terminal the reader still shows, it just cannot be
 			// driven

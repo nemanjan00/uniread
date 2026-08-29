@@ -72,7 +72,14 @@ module.exports = (book, options) => {
 		},
 
 		_init: (book) => {
-			player._screen = blessed.screen({debug: true});
+			const screenOptions = {debug: true};
+
+			// A book arriving on stdin leaves nothing there to read keys from
+			if(options.input){
+				screenOptions.input = options.input;
+			}
+
+			player._screen = blessed.screen(screenOptions);
 
 			var grid = new Grid({rows: 12, cols: 12, screen: player._screen});
 
