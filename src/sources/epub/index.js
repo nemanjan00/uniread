@@ -1,4 +1,4 @@
-const EPub = require("epub");
+const {EPub} = require("epub");
 
 const markup = require("../markup");
 
@@ -7,28 +7,14 @@ module.exports = (filename) => {
 		_epub: undefined,
 
 		_init: (filename) => {
-			return new Promise((resolve, reject) => {
-				book._epub = new EPub(filename);
+			book._epub = new EPub(filename);
 
-				book._epub.on("end", function(){
-					resolve(book);
-				});
-
-				book._epub.on("error", reject);
-
-				book._epub.parse();
+			return book._epub.parse().then(() => {
+				return book;
 			});
 		},
 		_getChapter: (id) => {
-			return new Promise((resolve, reject) => {
-				book._epub.getChapter(id, (error, content) => {
-					if(error){
-						return reject(error);
-					}
-
-					resolve(content);
-				});
-			});
+			return book._epub.getChapter(id);
 		},
 
 		getTitle: () => {
@@ -60,4 +46,3 @@ module.exports = (filename) => {
 
 	return book._init(filename);
 };
-
