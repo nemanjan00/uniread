@@ -14,7 +14,10 @@ const stream = uniread.sources.stream;
 
 const library = uniread.library.open();
 
+const flags = process.argv.slice(2).filter((argument) => argument.startsWith("-"));
 const args = process.argv.slice(2).filter((argument) => !argument.startsWith("-"));
+
+const paused = flags.indexOf("--paused") !== -1 || flags.indexOf("-p") !== -1;
 
 const open = (file) => {
 	return spritz.getBook(file);
@@ -25,7 +28,8 @@ const read = (file) => {
 		cli(book, {
 			file: file,
 			library: library,
-			open: open
+			open: open,
+			paused: paused
 		});
 	}).catch(() => {
 		console.log("Book format not supported");
@@ -50,6 +54,7 @@ const readStdin = () => {
 
 		cli(book, {
 			open: open,
+			paused: paused,
 			input: input
 		});
 	}).catch(() => {

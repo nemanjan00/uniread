@@ -13,9 +13,9 @@ const picker = require("./picker");
 const SAVE_EVERY = 50;
 
 // `options` is optional: {file, library, open} enables resume and the recent
-// book picker, `open` is what loads another book (file => Promise<book>), and
-// `input` is where key presses come from when stdin is busy carrying the book
-// itself
+// book picker, `open` is what loads another book (file => Promise<book>),
+// `paused` starts the reader stopped, and `input` is where key presses come
+// from when stdin is busy carrying the book itself
 module.exports = (book, options) => {
 	options = options || {};
 
@@ -187,7 +187,12 @@ module.exports = (book, options) => {
 				player._draw();
 			});
 
-			player.togglePlay();
+			// Starting stopped gives the reader a moment to find the word
+			if(options.paused){
+				player._draw();
+			} else {
+				player.togglePlay();
+			}
 		},
 
 		// Where this book was left off, if the library knows about it

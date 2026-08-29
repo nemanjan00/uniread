@@ -80,6 +80,13 @@ extracts its text:
 get-current-page-text | uniread
 ```
 
+To start stopped, rather than having to catch up with a book that is already
+running:
+
+```bash
+uniread --paused ~/Books/somebook.epub
+```
+
 ### Controls
 
 | Key | Action |
